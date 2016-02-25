@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">InputAudio</string>
+    <string name="recString">Record!</string>
+    <string name="stopBtn">STOP!</string>
+    <string name="playBtn">Play!</string>
+    <string name="checkB">Check File Name</string>
+</resources>
