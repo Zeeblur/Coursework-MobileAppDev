@@ -4,4 +4,5 @@
     <string name="stopBtn">STOP!</string>
     <string name="playBtn">Play!</string>
     <string name="checkB">Check File Name</string>
+    <string name="switchTxt">Switch screen</string>
 </resources>

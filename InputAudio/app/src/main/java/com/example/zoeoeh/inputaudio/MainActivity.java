@@ -1,5 +1,6 @@
 package com.example.zoeoeh.inputaudio;
 
+import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -36,10 +37,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void switchActivityBtn()
+    {
+        Button switchBtn = (Button)findViewById(R.id.switchBtn);
+        switchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent playActivity = new Intent(MainActivity.this, PlayTune.class);
+                startActivity(playActivity);
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        switchActivityBtn();
+
         final boolean nameSet = false;
 
         final EditText nameField = (EditText)findViewById(R.id.editText);
@@ -93,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Stopped", Toast.LENGTH_SHORT).show();
             }
         });
-
 
 
 

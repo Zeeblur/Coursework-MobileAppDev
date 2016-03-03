@@ -66,4 +66,15 @@
         android:layout_below="@+id/editText"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/switchTxt"
+        android:id="@+id/switchBtn"
+        android:layout_marginBottom="33dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/button"
+        android:layout_toEndOf="@+id/button" />
+
 </RelativeLayout>
