@@ -347,8 +347,10 @@ public class TestRenderer implements GLSurfaceView.Renderer
     /** Allocate storage for the final combined matrix. This will be passed into the shader program. */
     private float[] mMVPMatrix = new float[16];
 
-    /** Store our model data in a float buffer. */
-    private final FloatBuffer mTriangle1Vertices;
+    /** Store our model data in a flocubeVerticesat buffer. */
+    private final FloatBuffer cubeVertices;
+
+   // private final FloatBuffer mTriangle2Vertices;
 
     /** This will be used to pass in the transformation matrix. */
     private int mMVPMatrixHandle;
@@ -358,6 +360,8 @@ public class TestRenderer implements GLSurfaceView.Renderer
 
     /** This will be used to pass in model color information. */
     private int mColorHandle;
+    private int mNormalHandle;
+    private int mMVMatrixHandle;
 
     /** How many bytes per float. */
     private final int mBytesPerFloat = 4;
@@ -377,6 +381,23 @@ public class TestRenderer implements GLSurfaceView.Renderer
     /** Size of the color data in elements. */
     private final int mColorDataSize = 4;
 
+    private int lightHandle;
+
+    /** Used to hold a light centered on the origin in model space. We need a 4th coordinate so we can get translations to work when
+     *  we multiply this by our transformation matrices. */
+    private final float[] mLightPosInModelSpace = new float[] {0.0f, 0.0f, 0.0f, 1.0f};
+
+    /** Used to hold the current position of the light in world space (after transformation via model matrix). */
+    private final float[] mLightPosInWorldSpace = new float[4];
+
+    /** Used to hold the transformed position of the light in eye space (after transformation via modelview matrix) */
+    private final float[] mLightPosInEyeSpace = new float[4];
+
+    private final FloatBuffer cubeNormals;
+
+
+    private int headStockIndices, neckIndices;
+
     /**
      * Initialize the model data.
      */
@@ -385,49 +406,194 @@ public class TestRenderer implements GLSurfaceView.Renderer
         // Define points for equilateral triangles.
 
         // This triangle is red, green, and blue.
-        final float[] triangle1VerticesData = {
+        final float[] triangleVerticesData = {
                 // X, Y, Z,
                 // R, G, B, A
-                -0.5f, -0.25f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
+                -1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
 
-                0.5f, -0.25f, 0.0f,
-                0.0f, 0.0f, 1.0f, 1.0f,
+                1.0f, -1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
 
-                0.0f, 0.559016994f, 0.0f,
-                0.0f, 1.0f, 0.0f, 1.0f};
+                1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
 
-        // This triangle is yellow, cyan, and magenta.
-        final float[] triangle2VerticesData = {
-                // X, Y, Z,
-                // R, G, B, A
-                -0.5f, -0.25f, 0.0f,
-                1.0f, 1.0f, 0.0f, 1.0f,
+                // triangle two
+                1.0f, -1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
 
-                0.5f, -0.25f, 0.0f,
-                0.0f, 1.0f, 1.0f, 1.0f,
+                -1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
 
-                0.0f, 0.559016994f, 0.0f,
-                1.0f, 0.0f, 1.0f, 1.0f};
+                -1.0f, -1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
 
-        // This triangle is white, gray, and black.
-        final float[] triangle3VerticesData = {
-                // X, Y, Z,
-                // R, G, B, A
-                -0.5f, -0.25f, 0.0f,
-                1.0f, 1.0f, 1.0f, 1.0f,
 
-                0.5f, -0.25f, 0.0f,
-                0.5f, 0.5f, 0.5f, 1.0f,
+                // right side
+                1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
 
-                0.0f, 0.559016994f, 0.0f,
-                0.0f, 0.0f, 0.0f, 1.0f};
+                1.0f, -1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, 1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+
+                // left side
+                -1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, -1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, 1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                // back
+                -1.0f, 1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, 1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                // backside
+                1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, 1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+
+                // top
+                -1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, 1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, 1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, 1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, 1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                // bottom
+                -1.0f, -1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, -1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                -1.0f, -1.5f, 0.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+                1.0f, -1.5f, 1.0f,
+                0.6f, 0.2f, 0.0f, 1.0f,
+
+
+        };
+
+        final float[] cubeNormalData = {
+                // front
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+
+                // right
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+
+                // left
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+
+                // back
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+
+                // top
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+
+                // bottom
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+        };
 
         // Initialize the buffers.
-        mTriangle1Vertices = ByteBuffer.allocateDirect(triangle1VerticesData.length * mBytesPerFloat)
+        cubeVertices = ByteBuffer.allocateDirect(triangleVerticesData.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
 
-        mTriangle1Vertices.put(triangle1VerticesData).position(0);
+        cubeVertices.put(triangleVerticesData).position(0);
+
+        // divide by number of floats per triangle 7,
+        headStockIndices = triangleVerticesData.length/7;
+
+
+        // add normals to buffer
+        cubeNormals = ByteBuffer.allocateDirect(cubeNormalData.length * mBytesPerFloat).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        cubeNormals.put(cubeNormalData).position(0);
+
     }
 
     @Override
@@ -443,7 +609,7 @@ public class TestRenderer implements GLSurfaceView.Renderer
 
         // We are looking toward the distance
         final float lookX = 0.0f;
-        final float lookY = 0.0f;
+        final float lookY = -1.0f;
         final float lookZ = -5.0f;
 
         // Set our up vector. This is where our head would be pointing were we holding the camera.
@@ -456,31 +622,42 @@ public class TestRenderer implements GLSurfaceView.Renderer
         // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
+
+
         final String vertexShader =
-                "uniform mat4 u_MVPMatrix;      \n"		// A constant representing the combined model/view/projection matrix.
+                "uniform mat4 u_MVPMatrix;        \n"		// A constant representing the combined model/view/projection matrix.
+                + "uniform mat4 u_MVMatrix;       \n"
+                + "attribute vec4 a_Position;     \n"		// Per-vertex position information we will pass in.
+                + "attribute vec4 a_Color;        \n"		// Per-vertex color information we will pass in.
+                + "attribute vec3 a_Normal;       \n"
 
-                        + "attribute vec4 a_Position;     \n"		// Per-vertex position information we will pass in.
-                        + "attribute vec4 a_Color;        \n"		// Per-vertex color information we will pass in.
+                + "varying vec3 v_Normal;         \n"       // transformed normal
+                + "varying vec4 v_Color;          \n"		// This will be passed into the fragment shader.
+                + "varying vec3 v_Position;       \n"
 
-                        + "varying vec4 v_Color;          \n"		// This will be passed into the fragment shader.
-
-                        + "void main()                    \n"		// The entry point for our vertex shader.
-                        + "{                              \n"
-                        + "   v_Color = a_Color;          \n"		// Pass the color through to the fragment shader.
-                        // It will be interpolated across the triangle.
-                        + "   gl_Position = u_MVPMatrix   \n" 	// gl_Position is a special variable used to store the final position.
-                        + "               * a_Position;   \n"     // Multiply the vertex by the matrix to get the final point in
-                        + "}                              \n";    // normalized screen coordinates.
+                + "void main()                    \n"		// The entry point for our vertex shader.
+                + "{                              \n"
+                + "   v_Color = a_Color;          \n"		// Pass the color through to the fragment shader. It will be interpolated across the triangle
+                + "   gl_Position = u_MVPMatrix   \n" 	  // gl_Position is a special variable used to store the final position.
+                + "               * a_Position;   \n"     // Multiply the vertex by the matrix to get the final point in
+                + "   v_Position = vec3(u_MVMatrix * a_Position); \n"
+                + "   v_Normal = vec3(u_MVMatrix * vec4(a_Normal, 0.0)); \n"
+                + "}                              \n";    // normalized screen coordinates.
 
         final String fragmentShader =
-                "precision mediump float;       \n"		// Set the default precision to medium. We don't need as high of a
-                        // precision in the fragment shader.
-                        + "varying vec4 v_Color;          \n"		// This is the color from the vertex shader interpolated across the
-                        // triangle per fragment.
-                        + "void main()                    \n"		// The entry point for our fragment shader.
-                        + "{                              \n"
-                        + "   gl_FragColor = v_Color;     \n"		// Pass the color directly through the pipeline.
-                        + "}                              \n";
+                "precision mediump float;         \n"		// Set the default precision to medium. We don't need as high of a
+                + "uniform vec3 u_LightPos;       \n"         // precision in the fragment shader.
+                + "varying vec4 v_Color;          \n"		// This is the color from the vertex shader interpolated across the
+                + "varying vec3 v_Position;       \n"
+                + "varying vec3 v_Normal;         \n"
+
+                + "void main()                    \n"		// The entry point for our fragment shader.
+                + "{                              \n"
+                + "     float distance = length(u_LightPos - v_Position); \n"
+                + "     vec3 lightVector = normalize(u_LightPos - v_Position); \n"
+                + "     float diffuse = max(dot(v_Normal, lightVector), 0.1); \n"
+                        + "   gl_FragColor = v_Color * diffuse;     \n"		// Pass the color directly through the pipeline.
+                + "}                              \n";
 
         // Load in the vertex shader.
         int vertexShaderHandle = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
@@ -575,9 +752,13 @@ public class TestRenderer implements GLSurfaceView.Renderer
 
         // Set program handles. These will later be used to pass in values to the program.
         mMVPMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix");
+
+        mMVMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVMatrix");
         mPositionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
+        lightHandle = GLES20.glGetAttribLocation(programHandle, "u_LightPos");
         mColorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
+        mNormalHandle = GLES20.glGetAttribLocation(programHandle, "a_Normal");
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
     }
@@ -612,16 +793,23 @@ public class TestRenderer implements GLSurfaceView.Renderer
 
         // Draw the triangle facing straight on.
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 0.0f, 1.0f);
-        drawTriangle(mTriangle1Vertices);
+        //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);
+        Matrix.scaleM(mModelMatrix, 0, 0.5f, 0.4f, 0.4f);
+        drawTriangle(cubeVertices, headStockIndices);
+
+        Matrix.translateM(mModelMatrix, 0, 0.0f, -3.0f, 0.0f);
+        Matrix.scaleM(mModelMatrix, 0, 0.6f, 1.0f, 1.0f);
+        drawTriangle(cubeVertices, headStockIndices);
     }
+
+
 
     /**
      * Draws a triangle from the given vertex data.
      *
      * @param aTriangleBuffer The buffer containing the vertex data.
      */
-    private void drawTriangle(final FloatBuffer aTriangleBuffer)
+    private void drawTriangle(final FloatBuffer aTriangleBuffer, int numberOfIndices)
     {
         // Pass in the position information
         aTriangleBuffer.position(mPositionOffset);
@@ -637,16 +825,28 @@ public class TestRenderer implements GLSurfaceView.Renderer
 
         GLES20.glEnableVertexAttribArray(mColorHandle);
 
+        // Pass in the normal information
+        cubeNormals.position(0);
+        GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, false,
+                0, cubeNormals);
+
+        GLES20.glEnableVertexAttribArray(mNormalHandle);
+
         // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
         // (which currently contains model * view).
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
+
+        GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mMVPMatrix, 0);
 
         // This multiplies the modelview matrix by the projection matrix, and stores the result in the MVP matrix
         // (which now contains model * view * projection).
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
 
+        // set light position
+        GLES20.glUniform3f(lightHandle, 0.0f, 0.0f, -5.0f);
+
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, numberOfIndices);
     }
 }
 
