@@ -5,4 +5,6 @@
     <string name="playBtn">Play!</string>
     <string name="checkB">Check File Name</string>
     <string name="switchTxt">Switch screen</string>
+    <string name="playBtnRes">Play Tune</string>
+    <string name="pauseBtnRes">Pause</string>
 </resources>
