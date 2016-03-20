@@ -2,6 +2,7 @@ package com.example.zoeoeh.inputaudio;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,6 +10,7 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,7 +22,7 @@ import java.util.HashMap;
 
 
 // class uses SensorEventListener interface
-public class PlayTune extends Activity implements SensorEventListener {
+public class PlayTune extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
@@ -29,8 +31,12 @@ public class PlayTune extends Activity implements SensorEventListener {
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 600;
 
-    private static final int testNote1 = R.raw.referencenoteg;
-    private static final int testNote2 = R.raw.referencenotef;
+    private static final int testNoteELow = R.raw.referencenoteelower;
+    private static final int testNoteA = R.raw.referencenotea;
+    private static final int testNoteD = R.raw.referencenoted;
+    private static final int testNoteG = R.raw.referencenoteg;
+    private static final int testNoteB = R.raw.referencenoteb;
+    private static final int testNoteEHigh = R.raw.referencenoteehigher;
 
    // private static SoundPool soundPool;
     private static HashMap soundMap = new HashMap(2);
@@ -49,6 +55,8 @@ public class PlayTune extends Activity implements SensorEventListener {
         }
 
         mp = MediaPlayer.create(context, soundID);
+
+        mp.setLooping(true);
         mp.start();
     }
 
@@ -74,8 +82,8 @@ public class PlayTune extends Activity implements SensorEventListener {
         //soundMap.put(testNote1, soundPool.load(this, R.raw.referencenoteg, 1));
         //soundMap.put( testNote2, soundPool.load(this, R.raw.referencenotef, 2));
 
-        soundMap.put(testNote1, R.raw.referencenotee);
-        soundMap.put(testNote2, R.raw.referencenotef);
+       // soundMap.put(testNoteEHigh, R.raw.referencenoteehigher);
+       // soundMap.put(testNoteELow, R.raw.referencenoteelower);
 
         final Context myActivity = this;
         Button playBtn = (Button)findViewById(R.id.playBtn);
@@ -86,6 +94,27 @@ public class PlayTune extends Activity implements SensorEventListener {
             }
         });
 
+        Button pauseBtn = (Button)findViewById(R.id.pauseBtn);
+        pauseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mp.pause();
+            }
+        });
+
+        switchActivityBtn();
+    }
+
+    private void switchActivityBtn()
+    {
+        Button switchBtn = (Button)findViewById(R.id.switchBtn);
+        switchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent playActivity = new Intent(PlayTune.this, openGLPlay.class);
+                startActivity(playActivity);
+            }
+        });
     }
 
     @Override
@@ -116,13 +145,13 @@ public class PlayTune extends Activity implements SensorEventListener {
                 {
                     right = true;
                     direction = "Right";
-                    chosenString = testNote1;
+                    chosenString = testNoteA;
                 }
                 else
                 {
                     right = false;
                     direction = "left";
-                    chosenString = testNote2;
+                    chosenString = testNoteB;
                 }
 
                 speed = Math.abs(speed + y + z - last_y - last_z)/ diffTime * 10000;

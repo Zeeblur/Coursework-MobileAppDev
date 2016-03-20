@@ -3,26 +3,22 @@ package com.example.zoeoeh.inputaudio;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-public class openGLPlay extends Activity {
+public class openGLPlay extends AppCompatActivity {
 
-    private GLSurfaceView myGLview;
+    // create new instance of my custom surface view
+    private MyGLSurface myGLview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        myGLview = new GLSurfaceView(this); // create a surface view
+        // set the content to the XML activity containing the custom surface view - allows menu
+        setContentView(R.layout.activity_open_glplay);
 
-
-        // add supporting checks for OPENGL ES 2.0 HERE
-
-
-
-        myGLview.setEGLContextClientVersion(2);    // use openGL ES 2.0
-        myGLview.setRenderer(new TestRenderer());  // set renderer
-
-        setContentView(myGLview);  // tell android activity should be the openGL surface
+        // set view to surfaceView within XML
+        myGLview = (MyGLSurface) findViewById(R.id.surfaceView);
     }
 
     @Override

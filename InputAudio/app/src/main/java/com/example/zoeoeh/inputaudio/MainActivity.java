@@ -5,6 +5,7 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import java.io.FileOutputStream;
 // import AudioRecord
 //import android.media.AudioRecord;
 
+// extends appCompat to allow for toolbar support
 public class MainActivity extends AppCompatActivity {
 
     MediaRecorder recorder = new MediaRecorder();
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         switchActivityBtn();
 
