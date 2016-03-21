@@ -3,11 +3,14 @@ package com.example.zoeoeh.inputaudio;
 import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,8 +19,8 @@ import android.widget.Toast;
 //import android.media.AudioRecord;
 
 // extends appCompat to allow for toolbar support
-public class Recorder extends AppCompatActivity {
-
+public class Recorder extends Fragment {//AppCompatActivity {
+/*
     MediaRecorder recorder = new MediaRecorder();
 
     String myRecName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/Test/";
@@ -47,17 +50,23 @@ public class Recorder extends AppCompatActivity {
             }
         });
     }
-
+*/
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    //protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_main);
+        View myView = inflater.inflate(R.layout.activity_main, container, false);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+        return myView;
+    }
+
+       // Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        //setSupportActionBar(myToolbar);
         //myToolbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        switchActivityBtn();
+       /* switchActivityBtn();
 
         final boolean nameSet = false;
 
@@ -126,5 +135,5 @@ public class Recorder extends AppCompatActivity {
 
 
 
-
+*/
 }

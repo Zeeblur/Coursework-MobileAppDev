@@ -1,5 +1,6 @@
 package com.example.zoeoeh.inputaudio;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -8,8 +9,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -19,7 +23,7 @@ import java.util.HashMap;
 
 
 // class uses SensorEventListener interface
-public class PlayTune extends AppCompatActivity implements SensorEventListener {
+public class PlayTune extends Fragment implements SensorEventListener {
 
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
@@ -58,9 +62,18 @@ public class PlayTune extends AppCompatActivity implements SensorEventListener {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_tune);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+
+        // Replaces setContentView - set the content to the XML activity containing the custom surface view
+        View myView = inflater.inflate(R.layout.activity_play_tune, container, false);
+        return myView;
+    }
+
+    //protected void onCreate(Bundle savedInstanceState) {
+       // super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_play_tune);
 
         /*To initialize the SensorManager instance, we invoke getSystemService to fetch the system's
         SensorManager instance, which we in turn use to access the system's sensors.
@@ -72,9 +85,9 @@ public class PlayTune extends AppCompatActivity implements SensorEventListener {
         the activity's context, a sensor, and the rate at which sensor events are delivered to us.
          */
 
-        senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+       // senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+       // senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+      //  senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
         //soundMap.put(testNote1, soundPool.load(this, R.raw.referencenoteg, 1));
         //soundMap.put( testNote2, soundPool.load(this, R.raw.referencenotef, 2));
@@ -82,7 +95,7 @@ public class PlayTune extends AppCompatActivity implements SensorEventListener {
        // soundMap.put(testNoteEHigh, R.raw.referencenoteehigher);
        // soundMap.put(testNoteELow, R.raw.referencenoteelower);
 
-        final Context myActivity = this;
+      /*  final Context myActivity = this;
         Button playBtn = (Button)findViewById(R.id.playBtn);
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,9 +112,10 @@ public class PlayTune extends AppCompatActivity implements SensorEventListener {
             }
         });
 
-        switchActivityBtn();
-    }
+       // switchActivityBtn();*/
+   // }
 
+/*
     private void switchActivityBtn()
     {
         Button switchBtn = (Button)findViewById(R.id.switchBtn);
@@ -112,7 +126,7 @@ public class PlayTune extends AppCompatActivity implements SensorEventListener {
                 startActivity(playActivity);
             }
         });
-    }
+    } */
 
     @Override
     public void onSensorChanged(SensorEvent event)
@@ -155,7 +169,7 @@ public class PlayTune extends AppCompatActivity implements SensorEventListener {
 
                 if (speed > SHAKE_THRESHOLD)
                 {
-                    Toast.makeText(getBaseContext(), "YOU SHOOK ME" + direction + "choice is " + chosenString, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), "YOU SHOOK ME" + direction + "choice is " + chosenString, Toast.LENGTH_SHORT).show();
                 }
                 last_x = x;
                 last_y = y;
@@ -172,17 +186,17 @@ public class PlayTune extends AppCompatActivity implements SensorEventListener {
     }
 
     @Override
-    protected void onPause()
+    public void onPause()
     {
         super.onPause();
-        senSensorManager.unregisterListener(this);
+        //senSensorManager.unregisterListener(this);
     }
 
     @Override
-    protected void onResume()
+    public void onResume()
     {
         super.onResume();
-        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        //senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
