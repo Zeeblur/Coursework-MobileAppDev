@@ -1,13 +1,11 @@
 package com.example.zoeoeh.inputaudio;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +14,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 // import sound pool
-import android.media.SoundPool;
 
 import java.util.HashMap;
 
@@ -111,7 +108,7 @@ public class PlayTune extends AppCompatActivity implements SensorEventListener {
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent playActivity = new Intent(PlayTune.this, openGLPlay.class);
+                Intent playActivity = new Intent(PlayTune.this, OpenGLClass.class);
                 startActivity(playActivity);
             }
         });

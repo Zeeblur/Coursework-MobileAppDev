@@ -6,20 +6,17 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import android.util.Log;
-
-import java.io.FileOutputStream;
-
 // import AudioRecord
 //import android.media.AudioRecord;
 
 // extends appCompat to allow for toolbar support
-public class MainActivity extends AppCompatActivity {
+public class Recorder extends AppCompatActivity {
 
     MediaRecorder recorder = new MediaRecorder();
 
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent playActivity = new Intent(MainActivity.this, PlayTune.class);
+                Intent playActivity = new Intent(Recorder.this, PlayTune.class);
                 startActivity(playActivity);
             }
         });
@@ -58,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        //myToolbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         switchActivityBtn();
 
@@ -118,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
 
 
 

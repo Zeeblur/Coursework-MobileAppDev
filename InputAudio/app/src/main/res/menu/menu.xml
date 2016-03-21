@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_play"
+        android:title="@string/app_play"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_tune"
+        android:title="@string/app_tune"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_rec"
+        android:title="@string/app_rec"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

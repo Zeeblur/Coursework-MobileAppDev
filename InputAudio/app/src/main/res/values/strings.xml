@@ -7,4 +7,7 @@
     <string name="switchTxt">Switch screen</string>
     <string name="playBtnRes">Play Tune</string>
     <string name="pauseBtnRes">Pause</string>
+    <string name="app_play">Play</string>
+    <string name="app_rec">Record</string>
+    <string name="app_tune">Tune</string>
 </resources>

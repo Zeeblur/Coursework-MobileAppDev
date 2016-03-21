@@ -4,22 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.zoeoeh.inputaudio.MainActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="#5091f1"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="center" />
+    tools:context=".Recorder">
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,9 +51,7 @@
         android:id="@+id/editText"
         android:layout_below="@+id/textView"
         android:layout_alignLeft="@+id/recBtn"
-        android:layout_alignStart="@+id/recBtn"
-        android:layout_alignRight="@+id/recBtn"
-        android:layout_alignEnd="@+id/recBtn" />
+        android:layout_alignStart="@+id/recBtn" />
 
     <Button
         android:layout_width="wrap_content"

@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="tabTextCol">#000000</color>
+    <color name="backgroundGrey">#5E5C5D</color>
+    <color name="highlightBlue">#5ABFD1</color>
 </resources>
