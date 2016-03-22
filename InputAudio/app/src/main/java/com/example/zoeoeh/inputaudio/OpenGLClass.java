@@ -38,5 +38,7 @@ public class OpenGLClass extends Fragment {
     {
         super.onPause();
         myGLview.onPause();
+
+
     }
 }

@@ -10,4 +10,7 @@
     <string name="app_play">Play</string>
     <string name="app_rec">Record</string>
     <string name="app_tune">Tune</string>
+    <string name="desc">Enter description: (Optional)</string>
+    <string name="fileName">Enter Filename: </string>
+    <string name="tempName">audio_recording</string>
 </resources>
