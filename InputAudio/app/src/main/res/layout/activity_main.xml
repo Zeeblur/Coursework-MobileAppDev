@@ -4,72 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Recorder">
+    tools:context=".Recorder"
+    android:background="@color/backgroundGrey">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter filename:"
-        android:id="@+id/textView"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_alignLeft="@+id/checkBtn"
-        android:layout_alignStart="@+id/checkBtn" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/recString"
-        android:id="@+id/recBtn"
-        android:layout_above="@+id/stopBtn"
-        android:layout_alignLeft="@+id/button"
-        android:layout_alignStart="@+id/button" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stopBtn"
-        android:id="@+id/stopBtn"
+        android:id="@+id/micImage"
+        android:src="@drawable/silvermic"
         android:layout_centerVertical="true"
-        android:layout_alignRight="@+id/recBtn"
-        android:layout_alignEnd="@+id/recBtn"
-        android:layout_alignLeft="@+id/recBtn"
-        android:layout_alignStart="@+id/recBtn" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/playBtn"
-        android:id="@+id/button"
-        android:layout_below="@+id/stopBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="78dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/recBtn"
-        android:layout_alignStart="@+id/recBtn" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/checkB"
-        android:id="@+id/checkBtn"
-        android:layout_below="@+id/editText"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/switchTxt"
-        android:id="@+id/switchBtn"
-        android:layout_marginBottom="33dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/button"
-        android:layout_toEndOf="@+id/button" />
+        android:id="@+id/recordBtn"
+        android:src="@drawable/btnplay"
+        android:layout_below="@+id/micImage"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

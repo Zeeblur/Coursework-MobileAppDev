@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 // import AudioRecord
@@ -20,13 +21,15 @@ import android.widget.Toast;
 
 // extends appCompat to allow for toolbar support
 public class Recorder extends Fragment {//AppCompatActivity {
-/*
-    MediaRecorder recorder = new MediaRecorder();
+
+    MediaRecorder recorder;
+    ImageButton recBtn;
 
     String myRecName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/Test/";
 
     private void prepareRec()
     {
+        recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
@@ -35,22 +38,22 @@ public class Recorder extends Fragment {//AppCompatActivity {
         try {
             recorder.prepare();
         } catch (Exception e) {
-            System.out.print("caught exception");
+            e.printStackTrace();
         }
     }
 
-    private void switchActivityBtn()
+    private void changeImageBtn()
     {
-        Button switchBtn = (Button)findViewById(R.id.switchBtn);
-        switchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent playActivity = new Intent(Recorder.this, PlayTune.class);
-                startActivity(playActivity);
-            }
-        });
+        if (recorder != null)
+        {
+            recBtn.setImageResource(R.drawable.btnplay);
+        }
+        else
+        {
+            recBtn.setImageResource(R.drawable.btnstop);
+        }
     }
-*/
+
     @Override
     //protected void onCreate(Bundle savedInstanceState) {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,30 +62,52 @@ public class Recorder extends Fragment {//AppCompatActivity {
         //setContentView(R.layout.activity_main);
         View myView = inflater.inflate(R.layout.activity_main, container, false);
 
-        return myView;
-    }
-
-       // Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        //setSupportActionBar(myToolbar);
-        //myToolbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-       /* switchActivityBtn();
-
         final boolean nameSet = false;
 
-        final EditText nameField = (EditText)findViewById(R.id.editText);
+        //final EditText nameField = (EditText)myView.findViewById(R.id.editText);
 
-        Button recBtn = (Button)findViewById(R.id.recBtn);
+        recBtn = (ImageButton) myView.findViewById(R.id.recordBtn);
         recBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recorder.start();
+                // if recorder is null, nothing is recording
+                changeImageBtn();
 
-                Toast.makeText(getBaseContext(), "Started", Toast.LENGTH_SHORT).show();
-                //setText("stop");
+                if (recorder == null)
+                {
+                    myRecName += "tempRecording" + ".3gp";
+                    prepareRec();
+                    try {
+                        recorder.start();
+                    }catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    Toast.makeText(getActivity(), "Started", Toast.LENGTH_SHORT).show();
+
+                }
+                else if (recorder != null)
+                {
+                    // stop btn
+                    try {
+                        recorder.stop();
+                        recorder.release(); // clear buffer
+                        recorder = null;    // delete pointer
+
+
+                        Toast.makeText(getActivity(), "Stopped", Toast.LENGTH_SHORT).show();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                }
             }
         });
-        Button checkBtn = (Button)findViewById(R.id.checkBtn);
+/*
+        Button checkBtn = (Button)myView.findViewById(R.id.checkBtn);
         checkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -97,7 +122,7 @@ public class Recorder extends Fragment {//AppCompatActivity {
                     if (!Character.isLetterOrDigit(x))  // if not digit or letter valid = false break
                     {
                         valid = false;
-                        Toast.makeText(getBaseContext(), "Filename is not valid", Toast.LENGTH_SHORT).show(); // show toast
+                        Toast.makeText(getActivity(), "Filename is not valid", Toast.LENGTH_SHORT).show(); // show toast
                         break;
                     }
                 }
@@ -110,7 +135,8 @@ public class Recorder extends Fragment {//AppCompatActivity {
             }
         });
 
-        Button stopBtn = (Button)findViewById(R.id.stopBtn);
+        /*
+        Button stopBtn = (Button)myView.findViewById(R.id.stopBtn);
         stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,22 +144,12 @@ public class Recorder extends Fragment {//AppCompatActivity {
                 recorder.release(); // clear buffer
                 recorder = null;    // delete pointer
 
-                Toast.makeText(getBaseContext(), "Stopped", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Stopped", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-
-
 */
+
+        return myView;
+    }
+
 }

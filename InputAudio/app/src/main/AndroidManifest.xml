@@ -13,17 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <activity
-            android:name=".Recorder"
-            android:screenOrientation="portrait">
 
-        </activity>
-
-        <activity
-            android:name=".PlayTune"
-            android:screenOrientation="portrait">
-
-        </activity>
 
         <activity android:name=".TabSwitcher"
             android:screenOrientation="portrait">

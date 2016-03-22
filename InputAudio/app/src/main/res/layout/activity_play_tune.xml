@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playBtnRes"
-        android:id="@+id/playBtn"
+        android:id="@+id/recordBtn"
         android:layout_below="@+id/radioGroup"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -66,9 +66,9 @@
         android:layout_height="wrap_content"
         android:text="@string/pauseBtnRes"
         android:id="@+id/pauseBtn"
-        android:layout_alignTop="@+id/playBtn"
-        android:layout_toRightOf="@+id/playBtn"
-        android:layout_toEndOf="@+id/playBtn"
+        android:layout_alignTop="@+id/recordBtn"
+        android:layout_toRightOf="@+id/recordBtn"
+        android:layout_toEndOf="@+id/recordBtn"
         android:layout_marginLeft="35dp"
         android:layout_marginStart="35dp" />
 
@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:text="New Button"
         android:id="@+id/switchBtn"
-        android:layout_below="@+id/playBtn"
+        android:layout_below="@+id/recordBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="61dp" />
 </RelativeLayout>
