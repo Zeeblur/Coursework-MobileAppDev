@@ -13,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -33,8 +34,10 @@ import java.util.HashMap;
 // class uses SensorEventListener interface
 public class PlayTune extends Fragment {
 
-    private ArrayList<AudioClip> clipList;
-    private ListView clipView;
+    private static ArrayList<AudioClip> clipList;
+    private static ListView clipView;
+    private static ContentResolver soundResolver;
+    private static Uri soundUri;
 
 
     @Override
@@ -51,7 +54,22 @@ public class PlayTune extends Fragment {
         // instantiate list
         clipList = new ArrayList<AudioClip>();
 
+        soundResolver = getActivity().getContentResolver();
+        soundUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
+        populateClipListView();
+
+        return myView;
+    }
+
+    public void populateClipListView()
+    {
         // link to database and retrieve clips
+        if (clipList != null)
+        {
+            clipList.clear();
+        }
+
         getSongList();
 
         // sort list into alphabetical order from title
@@ -63,17 +81,15 @@ public class PlayTune extends Fragment {
         });
 
         // create clipAdapter instance and pass in the listview
-        ClipAdapt clipAd = new ClipAdapt(getContext(), clipList);
+        final ClipAdapt clipAd = new ClipAdapt(TabSwitcher.getmContext(), clipList);
         clipView.setAdapter(clipAd);
-
-        return myView;
     }
+
 
     public void getSongList()
     {
         // Content Resolver allows access to files from media store database
-        ContentResolver soundResolver = getContext().getContentResolver();
-        Uri soundUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
 
         // initialise database cursor
         Cursor soundCursor = soundResolver.query(soundUri, null, null, null, null);
@@ -95,6 +111,20 @@ public class PlayTune extends Fragment {
 
         }
 
+        soundCursor.close();
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+
 
 }

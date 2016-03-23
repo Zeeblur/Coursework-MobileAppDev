@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class ClipAdapt extends BaseAdapter {
 
     private ArrayList<AudioClip> clips;
-    private LayoutInflater clipInflater;
+    private final LayoutInflater clipInflater;
 
     public ClipAdapt(Context c, ArrayList<AudioClip> theClips)
     {

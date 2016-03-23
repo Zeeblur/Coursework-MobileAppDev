@@ -1,6 +1,9 @@
 package com.example.zoeoeh.inputaudio;
 
+
+import android.content.Context;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,13 +11,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+enum tabNumbers { play, record, guitar };
 
 public class TabSwitcher extends AppCompatActivity {
+
+    private static boolean listDirty = false;
+    private static Context mContext;
+
+    public static void setListDirty(Boolean value)
+    {
+        listDirty = value;
+    }
+
+    public static Context getmContext()
+    {
+        return mContext;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_switcher);
+
+        mContext = getApplicationContext();
 
         // initialise toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -38,17 +59,43 @@ public class TabSwitcher extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab)
             {
                 viewPager.setCurrentItem(tab.getPosition());
+
+                if (tab.getPosition() == 0 && listDirty)
+                {
+                    PlayTune myTune = (PlayTune)adapter.getItem(0);
+                    myTune.populateClipListView();
+                    listDirty = false;
+                }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab)
             {
-
+                // TODO destroy grpahic tab
+                /*
+                if (tab.getPosition() == 2) {
+                    Toast.makeText(getBaseContext(), tab.getPosition() + " is this 2", Toast.LENGTH_LONG).show();
+                    FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+                    trans.detach(adapter.getItem(2));
+                    trans.commit();
+                } */
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab)
             {
+               /* if (tab.getPosition() == 2) {
+                    FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+                    trans.attach(adapter.getItem(2));
+                    trans.commit();
+                } */
+
+                if (tab.getPosition() == 0 && listDirty)
+                {
+                    PlayTune myTune = (PlayTune)adapter.getItem(0);
+                    myTune.populateClipListView();
+                    listDirty = false;
+                }
 
             }
 

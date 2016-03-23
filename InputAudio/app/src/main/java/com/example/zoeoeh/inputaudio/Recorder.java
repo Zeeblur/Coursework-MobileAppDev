@@ -239,16 +239,18 @@ public class Recorder extends Fragment {
         values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (current / 1000));
         values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/AAC");
         values.put(MediaStore.Audio.Media.DATA, mySound.getAbsolutePath());
-        ContentResolver contentResolver = getContext().getContentResolver();
+        ContentResolver contentResolver = TabSwitcher.getmContext().getContentResolver();
 
         Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Uri newUri = contentResolver.insert(base, values);
 
-        getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
-        Toast.makeText(getContext(), "Added File " + newUri, Toast.LENGTH_LONG).show();
+        TabSwitcher.getmContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
+        Toast.makeText(TabSwitcher.getmContext(), "Added File " + newUri, Toast.LENGTH_LONG).show();
 
         //TODO refresh pages!!??!?!!
         //TODO add description and fix all showing
+
+        TabSwitcher.setListDirty(true);
     }
 
 
@@ -261,7 +263,7 @@ public class Recorder extends Fragment {
         if(file.exists())
         {
             // filename must be unique therefore return false
-            Toast.makeText(getActivity(), "Filename is already in use.", Toast.LENGTH_SHORT).show(); // show toast
+            Toast.makeText(TabSwitcher.getmContext(), "Filename is already in use.", Toast.LENGTH_SHORT).show(); // show toast
             return false;
         }
 
@@ -271,13 +273,27 @@ public class Recorder extends Fragment {
             char x = input.charAt(i);
             if (!Character.isLetterOrDigit(x))  // if not digit or letter valid = false break
             {
-                Toast.makeText(getActivity(), "Filename is not valid: letters and numbers only.", Toast.LENGTH_SHORT).show(); // show toast
+                Toast.makeText(TabSwitcher.getmContext(), "Filename is not valid: letters and numbers only.", Toast.LENGTH_SHORT).show(); // show toast
                 return false;
             }
         }
 
         return true;
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // Make sure that we are currently visible
+        if (this.isVisible()) {
+            // If we are becoming invisible, then...
+            if (!isVisibleToUser) {
+
+
+            }
+        }
     }
 
 }
