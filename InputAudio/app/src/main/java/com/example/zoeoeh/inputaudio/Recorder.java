@@ -1,14 +1,19 @@
 package com.example.zoeoeh.inputaudio;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -19,48 +24,45 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-// import AudioRecord
-//import android.media.AudioRecord;
-
-// extends appCompat to allow for toolbar support
 public class Recorder extends Fragment {
 
-    MediaRecorder recorder;
-    ImageButton recBtn;
-    EditText result;
+    private static final String TAG = "Recorder";
 
-    String recDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/Test/";
-    String fileExt = ".AAC";
+    private MediaRecorder recorder;
+    private ImageButton recBtn;
 
-    String tempName= "audio_recording";
+    private String recDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/Test/";
+    private String fileExt = ".AAC";
 
-    String temporaryRecording = recDir + tempName;
-    int tempRecNameCount = 0;
+    private String tempName= "audio_recording";
 
-    File tempFile;
-    /**
-     *
-     File sdcard = Environment.getExternalStorageDirectory();
-     File from = new File(sdcard,"from.txt");
-     File to = new File(sdcard,"to.txt");
-     from.renameTo(to);
-     */
+    private String temporaryRecording = recDir + tempName;
+    private int tempRecNameCount = 0;
+
+    private File tempFile;
+
+    //TODO get count for temporary recording
 
     private void prepareRec()
     {
-
+        //TODO validate temporary file name
+        // instantiate new media recorder and set up sources/formats
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         recorder.setOutputFile(temporaryRecording);
 
+        // prepare throws two exceptions
         try {
             recorder.prepare();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e(TAG, "prepare() failed" + e);
+        } catch (IllegalStateException e) {
+            Log.e(TAG, "prepare() called after start() before setOutputFormat()" + e);
         }
     }
 
@@ -77,16 +79,12 @@ public class Recorder extends Fragment {
     }
 
     @Override
-    //protected void onCreate(Bundle savedInstanceState) {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+
         View myView = inflater.inflate(R.layout.activity_main, container, false);
 
         final boolean nameSet = false;
-
-        //final EditText nameField = (EditText)myView.findViewById(R.id.editText);
 
         recBtn = (ImageButton) myView.findViewById(R.id.recordBtn);
         recBtn.setOnClickListener(new View.OnClickListener() {
@@ -102,11 +100,13 @@ public class Recorder extends Fragment {
                     tempRecNameCount++;
                     temporaryRecording = recDir + tempName + tempRecNameCount + fileExt;
                     prepareRec();
+
+                    // throws exception if called before prepare()
                     try {
                         recorder.start();
-                    }catch(Exception e)
+                    }catch(IllegalStateException e)
                     {
-                        e.printStackTrace();
+                        Log.e(TAG, "start() failed: " +e);
                     }
 
                     Toast.makeText(getActivity(), "Started", Toast.LENGTH_SHORT).show();
@@ -117,173 +117,167 @@ public class Recorder extends Fragment {
                 }
                 else if (recorder != null)
                 {
-                    // stop btn
+                    // if recorder is not null this button becomes a stop button
+
+                    // stop() can throw two exceptions, if recorder is not initialised
+                    // if stop() is called before start()
                     try {
                         recorder.stop();
-                        recorder.release(); // clear buffer
-                        recorder = null;    // delete pointer
-
-
                         Toast.makeText(getActivity(), "Stopped", Toast.LENGTH_SHORT).show();
                     }
-                    catch (Exception e)
+                    catch (NullPointerException e)
                     {
-                        e.printStackTrace();
+                        Log.e(TAG, "Stop() - recorder is not initialised: " +e);
+                    }
+                    catch (IllegalStateException e)
+                    {
+                        Log.e(TAG, "stop() error: " +e);
                     }
 
-                    // get prompts.xml view
-                    LayoutInflater li = LayoutInflater.from(getActivity());
-                    View promptsView = li.inflate(R.layout.prompt_save, null);
+                    recorder.release(); // clear buffer
+                    recorder = null;    // delete pointer
 
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                            getActivity());
-
-                    // set prompts.xml to alertdialog builder
-                    alertDialogBuilder.setView(promptsView);
-
-                    final EditText userInput = (EditText) promptsView
-                            .findViewById(R.id.editTextDialogUserInput);
-
-                    // set dialog message
-                    alertDialogBuilder
-                            .setCancelable(false) // cannot cancel
-
-                                    // Positive button checks filename
-                            .setPositiveButton("Save",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // get user input and set it to result
-                                            // edit text
-                                            result.setText(userInput.getText());
-                                        }
-                                    })
-
-                                    // Negative button deletes file and closes dialog
-                            .setNegativeButton("Delete",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // close dialog
-                                            dialog.cancel();
-
-                                            // delete file
-                                            boolean deleted = tempFile.delete();
-                                        }
-                                    });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    // show it
-                    alertDialog.show();
-
+                    // show dialog to ask for filename change or delete
+                    showDialog();
 
                 }
-            }
-        });
-
-        // components from main.xml
-        Button button = (Button) myView.findViewById(R.id.buttonPrompt);
-        result = (EditText) myView.findViewById(R.id.editTextResult);
-
-        // add button listener
-        button.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
-                // get prompts.xml view
-                LayoutInflater li = LayoutInflater.from(getActivity());
-                View promptsView = li.inflate(R.layout.prompt_save, null);
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        getActivity());
-
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(promptsView);
-
-                final EditText userInput = (EditText) promptsView
-                        .findViewById(R.id.editTextDialogUserInput);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(false) // cannot cancel
-
-                        // Positive button checks filename
-                        .setPositiveButton("Save",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        result.setText(userInput.getText());
-                                    }
-                                })
-
-                        // Negative button deletes file and closes dialog
-                        .setNegativeButton("Delete",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // close dialog
-                                        dialog.cancel();
-
-                                        // delete file
-                                        boolean deleted = tempFile.delete();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
-
             }
         });
 
         return myView;
     }
 
+    public void showDialog()
+    {
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(getActivity());
+        View promptsView = li.inflate(R.layout.prompt_save, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false) // cannot cancel
+
+                .setPositiveButton("Save",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Positive button checks filename
+                                // Overriden below
+                            }
+                        })
+
+                .setNegativeButton("Delete",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Negative button deletes file and closes dialog
+                                // overriden handler after dialog is shown
+                            }
+                        });
+
+        // create alert dialog
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+        //Override button handlers after show to stop from closing if title entered is invalid
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                // get user input and set it to result
+                // edit text
+                //TODO validate input and rename file
+                //TODO set database values and update
+                boolean valid = validateInputFileName(userInput.getText().toString());
+
+                if (valid)
+                {
+                    alertDialog.dismiss();
+                    insertFileIntoDatabase(userInput.getText().toString());
+                }
+            }
+        });
+
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // close dialog
+                alertDialog.cancel();
+
+                // delete file
+                boolean deleted = tempFile.delete();
+            }
+        });
+    }
+
+
+    public void insertFileIntoDatabase(String fileName)
+    {
+        // TODO database broadcast
+        File mySound = new File(recDir, fileName + fileExt);
+
+        // rename file
+        boolean rename = tempFile.renameTo(mySound);
+
+
+        // add recording to media database
+
+
+        ContentValues values = new ContentValues(4);
+        long current = System.currentTimeMillis();
+        values.put(MediaStore.Audio.Media.TITLE, fileName);
+        values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (current / 1000));
+        values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/AAC");
+        values.put(MediaStore.Audio.Media.DATA, mySound.getAbsolutePath());
+        ContentResolver contentResolver = getContext().getContentResolver();
+
+        Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri newUri = contentResolver.insert(base, values);
+
+        getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
+        Toast.makeText(getContext(), "Added File " + newUri, Toast.LENGTH_LONG).show();
+
+        //TODO refresh pages!!??!?!!
+        //TODO add description and fix all showing
+    }
+
+
     public boolean validateInputFileName(String input)
     {
+        // TODO check for blank strings!!
+
         // check if existing file
         File file = new File(recDir + input + fileExt);
         if(file.exists())
         {
+            // filename must be unique therefore return false
+            Toast.makeText(getActivity(), "Filename is already in use.", Toast.LENGTH_SHORT).show(); // show toast
             return false;
+        }
+
+        // iterate through chars check if letter or digit, if any is not return false.
+        for (int i = 0; i < input.length(); ++i)
+        {
+            char x = input.charAt(i);
+            if (!Character.isLetterOrDigit(x))  // if not digit or letter valid = false break
+            {
+                Toast.makeText(getActivity(), "Filename is not valid: letters and numbers only.", Toast.LENGTH_SHORT).show(); // show toast
+                return false;
+            }
         }
 
         return true;
 
     }
-
-    /*
-        Button checkBtn = (Button)myView.findViewById(R.id.checkBtn);
-        checkBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                // check text field
-                String text = nameField.getText().toString();
-                boolean valid = true;
-
-                for (int i = 0; i < text.length(); ++i)
-                {
-                    char x = text.charAt(i);
-                    if (!Character.isLetterOrDigit(x))  // if not digit or letter valid = false break
-                    {
-                        valid = false;
-                        Toast.makeText(getActivity(), "Filename is not valid", Toast.LENGTH_SHORT).show(); // show toast
-                        break;
-                    }
-                }
-
-                if (valid)
-                {
-                    myRecName += text + ".3gp";
-                    prepareRec();
-                }
-            }
-        });
-
- */
 
 }
