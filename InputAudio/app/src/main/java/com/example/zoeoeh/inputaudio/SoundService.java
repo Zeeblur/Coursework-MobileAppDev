@@ -84,11 +84,15 @@ public class SoundService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-
+        if(myPlayer.getCurrentPosition() > 0){
+            mp.reset();
+            playNext();
+        }
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        mp.reset();
         return false;
     }
 
@@ -97,6 +101,7 @@ public class SoundService extends Service implements
     {
         // when prepared start playback
         mp.start();
+        PlayTune.controller.show(0);
     }
 
     public void setList(ArrayList<AudioClip> value)
@@ -139,6 +144,49 @@ public class SoundService extends Service implements
     {
         // allows user to pick what sound clip to play
         currentPos = clipIndex;
+    }
+
+    public int getPosn(){
+        return myPlayer.getCurrentPosition();
+    }
+
+    public int getDur(){
+        return myPlayer.getDuration();
+    }
+
+    public boolean isPng(){
+        return myPlayer.isPlaying();
+    }
+
+    public void pausePlayer(){
+        myPlayer.pause();
+    }
+
+    public void seek(int posn){
+        myPlayer.seekTo(posn);
+    }
+
+    public void go(){
+        myPlayer.start();
+    }
+
+    public void playPrev(){
+        currentPos--;
+
+        if(currentPos < 0)
+        {
+            currentPos=clips.size()-1;
+        }
+        startPlaying();
+    }
+
+    public void playNext(){
+        currentPos++;
+        if(currentPos > clips.size())
+        {
+            currentPos=0;
+        }
+        startPlaying();
     }
 
 }

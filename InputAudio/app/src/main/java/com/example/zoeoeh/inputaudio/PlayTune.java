@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
+import android.util.Log;
 import android.widget.MediaController.MediaPlayerControl;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -35,13 +36,14 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
     private static ContentResolver soundResolver;
     private static Uri soundUri;
 
-    private static SoundController controller;
+    public static SoundController controller;
 
 
     // instance variables for playback music
     private static SoundService myService;
     private static Intent playIntent;
     private static boolean musicBound = false;
+    private boolean paused=false, playbackPaused=false;
 
     private static View myView;
 
@@ -63,7 +65,11 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         soundResolver = getActivity().getContentResolver();
         soundUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
+        // add items to list
         populateClipListView();
+
+        // set music controller
+        setController();
 
         myService = new SoundService();
         return myView;
@@ -147,11 +153,48 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
     @Override
     public void onResume() {
         super.onResume();
+        if (paused)
+        {
+            setController();
+            paused=false;
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        paused=true;
+    }
+
+    @Override
+    public void onStop()
+    {
+        controller.hide();
+        super.onStop();
+    }
+
+
+    //TODO have a look at this reeee
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // Make sure that we are currently visible
+        if (this.isVisible()) {
+            // If we are becoming invisible, then...
+            if (!isVisibleToUser) {
+                Log.d("MyFragment", "Not visible anymore.  Stopping audio.");
+                // TODO stop audio playback
+                paused=true;
+                playbackPaused= true;
+                controller.hide();
+            }
+            else
+            {
+                paused = false;
+                setController();
+            }
+        }
     }
 
     @Override
@@ -168,15 +211,23 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         System.exit(0);
     }
 
-
     // click handler for clip view
     public void clipPicked(View view) {
         myService.pickClip(Integer.parseInt(view.getTag().toString()));
         myService.startPlaying();
+        if (playbackPaused)
+        {
+            setController();
+            playbackPaused = false;
+        }
+        //controller.show(0);
     }
 
     private void setController() {
-        controller = new SoundController(TabSwitcher.getmContext());
+        if (controller == null)
+        {
+            controller = new SoundController(myView.getContext());
+        }
 
         controller.setPrevNextListeners(new View.OnClickListener() {
             @Override
@@ -193,46 +244,68 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         controller.setMediaPlayer(this);
         controller.setAnchorView(myView.findViewById(R.id.clipList));
         controller.setEnabled(true);
+
     }
 
     public void playNext()
     {
+        myService.playNext();
 
+        if (playbackPaused)
+        {
+            setController();
+            playbackPaused = false;
+        }
+        //controller.show(0);
     }
 
     public void playPrev()
     {
+        myService.playPrev();
 
+        if (playbackPaused)
+        {
+            setController();
+            playbackPaused = false;
+        }
+        //controller.show(0);
     }
 
     // Implementation of media player controller interface
     @Override
     public void start() {
-
+        myService.go();
     }
 
     @Override
     public void pause() {
-
+        playbackPaused = true;
+        myService.pausePlayer();
     }
 
     @Override
     public int getDuration() {
-        return 0;
+        if(myService!=null && musicBound && myService.isPng())
+        return myService.getDur();
+        else return 0;
     }
 
     @Override
     public int getCurrentPosition() {
-        return 0;
+        if(myService!=null && musicBound && myService.isPng())
+        return myService.getPosn();
+        else return 0;
     }
 
     @Override
     public void seekTo(int pos) {
-
+        myService.seek(pos);
     }
 
     @Override
     public boolean isPlaying() {
+        if(myService!=null && musicBound)
+        return myService.isPng();
         return false;
     }
 
@@ -243,17 +316,17 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
 
     @Override
     public boolean canPause() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canSeekBackward() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canSeekForward() {
-        return false;
+        return true;
     }
 
     @Override
