@@ -121,7 +121,8 @@ public class Recorder extends Fragment {
 
                     // stop() can throw two exceptions, if recorder is not initialised
                     // if stop() is called before start()
-                    try {
+                    try
+                    {
                         recorder.stop();
                         Toast.makeText(getActivity(), "Stopped", Toast.LENGTH_SHORT).show();
                     }
@@ -196,8 +197,7 @@ public class Recorder extends Fragment {
             {
                 // get user input and set it to result
                 // edit text
-                //TODO validate input and rename file
-                //TODO set database values and update
+
                 boolean valid = validateInputFileName(userInput.getText().toString());
 
                 if (valid)
@@ -223,7 +223,6 @@ public class Recorder extends Fragment {
 
     public void insertFileIntoDatabase(String fileName)
     {
-        // TODO database broadcast
         File mySound = new File(recDir, fileName + fileExt);
 
         // rename file
@@ -247,9 +246,9 @@ public class Recorder extends Fragment {
         TabSwitcher.getmContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
         Toast.makeText(TabSwitcher.getmContext(), "Added File " + newUri, Toast.LENGTH_LONG).show();
 
-        //TODO refresh pages!!??!?!!
         //TODO add description and fix all showing
 
+        // sets dirty flag for updating list from database
         TabSwitcher.setListDirty(true);
     }
 
@@ -280,20 +279,6 @@ public class Recorder extends Fragment {
 
         return true;
 
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        // Make sure that we are currently visible
-        if (this.isVisible()) {
-            // If we are becoming invisible, then...
-            if (!isVisibleToUser) {
-
-
-            }
-        }
     }
 
 }

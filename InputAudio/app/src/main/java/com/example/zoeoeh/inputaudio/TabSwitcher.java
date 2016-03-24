@@ -1,6 +1,6 @@
 package com.example.zoeoeh.inputaudio;
 
-
+import android.app.Application;
 import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -13,12 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-enum tabNumbers { play, record, guitar };
-
 public class TabSwitcher extends AppCompatActivity {
 
     private static boolean listDirty = false;
     private static Context mContext;
+    private static PageAdapt adapter;
 
     public static void setListDirty(Boolean value)
     {
@@ -35,7 +34,7 @@ public class TabSwitcher extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_switcher);
 
-        mContext = getApplicationContext();
+        mContext = this;
 
         // initialise toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -48,7 +47,7 @@ public class TabSwitcher extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final PageAdapt adapter = new PageAdapt(getSupportFragmentManager(), tabLayout.getTabCount());
+        adapter = new PageAdapt(getSupportFragmentManager(), tabLayout.getTabCount());
 
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -113,8 +112,28 @@ public class TabSwitcher extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+
+        switch (item.getItemId()) {
+            case R.id.action_shuffle:
+                //shuffle
+                break;
+            case R.id.action_play:
+                PlayTune myTune = (PlayTune)adapter.getItem(0);
+                myTune.exitPlayer();
+                break;
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
+    // click handler for fragment xml clip
+    public void soundClicked(View view)
+    {
+        PlayTune myTune = (PlayTune)adapter.getItem(0);
+        myTune.clipPicked(view);
+        Toast.makeText(getmContext(), "mmhmmm clipPicked", Toast.LENGTH_SHORT).show();
+    }
+
 
 
 }
