@@ -22,10 +22,10 @@ public class PageAdapt extends FragmentStatePagerAdapter {
         switch (position)
         {
             case 0:
-                PlayTune tab1 = new PlayTune();
+                Recorder tab1 = new Recorder();
                 return tab1;
             case 1:
-                Recorder tab2 = new Recorder();
+                PlayTune tab2 = new PlayTune();
                 return tab2;
             case 2:
                 OpenGLClass tab3 = new OpenGLClass();

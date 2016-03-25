@@ -59,9 +59,9 @@ public class TabSwitcher extends AppCompatActivity {
             {
                 viewPager.setCurrentItem(tab.getPosition());
 
-                if (tab.getPosition() == 0 && listDirty)
+                if (tab.getPosition() == 1 && listDirty)
                 {
-                    PlayTune myTune = (PlayTune)adapter.getItem(0);
+                    PlayTune myTune = (PlayTune)adapter.getItem(1);
                     myTune.populateClipListView();
                     listDirty = false;
                 }
@@ -89,9 +89,9 @@ public class TabSwitcher extends AppCompatActivity {
                     trans.commit();
                 } */
 
-                if (tab.getPosition() == 0 && listDirty)
+                if (tab.getPosition() == 1 && listDirty)
                 {
-                    PlayTune myTune = (PlayTune)adapter.getItem(0);
+                    PlayTune myTune = (PlayTune)adapter.getItem(1);
                     myTune.populateClipListView();
                     listDirty = false;
                 }
@@ -118,7 +118,7 @@ public class TabSwitcher extends AppCompatActivity {
                 //shuffle
                 break;
             case R.id.action_play:
-                PlayTune myTune = (PlayTune)adapter.getItem(0);
+                PlayTune myTune = (PlayTune)adapter.getItem(1);
                 myTune.exitPlayer();
                 break;
         }
@@ -129,7 +129,7 @@ public class TabSwitcher extends AppCompatActivity {
     // click handler for fragment xml clip
     public void soundClicked(View view)
     {
-        PlayTune myTune = (PlayTune)adapter.getItem(0);
+        PlayTune myTune = (PlayTune)adapter.getItem(1);
         myTune.clipPicked(view);
         Toast.makeText(getmContext(), "mmhmmm clipPicked", Toast.LENGTH_SHORT).show();
     }

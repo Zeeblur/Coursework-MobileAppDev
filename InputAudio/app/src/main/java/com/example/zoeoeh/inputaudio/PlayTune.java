@@ -166,10 +166,12 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         paused=true;
     }
 
+    //TODO need to stop binding leak when frag is paused.
+
     @Override
     public void onStop()
     {
-        controller.hide();
+        controller.inVisible();
         super.onStop();
     }
 
@@ -187,12 +189,17 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
                 // TODO stop audio playback
                 paused=true;
                 playbackPaused= true;
-                controller.hide();
+
+                // when tab is invisible use super.hide to hide the controller.
+                controller.inVisible();
             }
             else
             {
                 paused = false;
                 setController();
+
+                // show controller when tab is visible.
+                controller.show(0);
             }
         }
     }
