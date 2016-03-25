@@ -1,8 +1,15 @@
 package com.example.zoeoeh.inputaudio;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.widget.Toast;
 
 /**
  * Created by Zoeoeh on 20/03/2016.
@@ -42,5 +49,32 @@ public class MyGLSurface extends GLSurfaceView {
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        if (event != null)
+        {
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                if (myRenderer != null)
+                {
+                    queueEvent(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("Surface", "I've been touched");
+                        }
+                    });
+
+                    return true;
+                }
+            }
+        }
+
+        return super.onTouchEvent(event);
+    }
+
+// TODO getting a service leak when using back button as not releasing mp properly.
+
+    // TODO write why I wont do raycasting....
 
 }

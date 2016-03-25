@@ -12,4 +12,13 @@
         android:id="@+id/surfaceView"
         android:layout_gravity="center" />
 
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loop"
+        android:id="@+id/loopSwitch"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="right|top" />
+
 </FrameLayout>

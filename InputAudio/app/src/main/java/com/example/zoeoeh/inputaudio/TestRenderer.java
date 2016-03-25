@@ -470,7 +470,7 @@ public class TestRenderer implements GLSurfaceView.Renderer {
 
         // Calculate position of the light. Rotate and then push into the distance.
         Matrix.setIdentityM(mLightModelMatrix, 0);
-        Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, -5.0f);
+        Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, -3.0f);
         //  Matrix.rotateM(mLightModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, 2.0f);
 
@@ -481,21 +481,35 @@ public class TestRenderer implements GLSurfaceView.Renderer {
 
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, 1.5f, -7.0f);
-        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.scaleM(mModelMatrix, 0, 2.5f, 3.25f, 1.0f);
         drawCube();
 
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, -3.0f, -7.0f);
-        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.scaleM(mModelMatrix, 0, 1.5f, 2.5f, 1.0f);
         drawCube();
 
         //GLES20.glUseProgram(dispProgramHandle);
 
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 0.25f, 2.5f, 1.0f);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, -1.5f, -6.0f);
+//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 0.15f);
+        drawCube();
+
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.5f, -1.5f, -6.0f);
+//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
+        Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 0.15f);
+        drawCube();
+
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 1.0f, -1.5f, -6.0f);
+//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
+        Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 0.15f);
         drawCube();
 
         // update translation
