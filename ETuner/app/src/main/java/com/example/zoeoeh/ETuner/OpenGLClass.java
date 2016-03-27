@@ -73,27 +73,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
                 // bool used for setting looping state of media player
                 loopingChecked = isChecked;
 
-                // if player is playing, stop and start with new looping set
-                if (myPlayer != null)
-                {
-                    Toast.makeText(TabSwitcher.getmContext(), "stopping loop" , Toast.LENGTH_SHORT).show();
-
-                    while (myPlayer.isPlaying())
-                    {
-                        // stop playback once the loop has completed (current position of track is at zero)
-                        if (myPlayer.getCurrentPosition() == 0)
-                        {
-                            stopPlay();
-                            break;
-                        }
-                    }
-
-                }
-
-                if (playChecked && loopingChecked)    // if it IS null and been checked start playing again
-                {
-                    playSound(TabSwitcher.getmContext(), currentSoundIndex);
-                }
+                updatePlay();
             }
         });
 
@@ -202,6 +182,10 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
                     Toast.makeText(TabSwitcher.getmContext(), "YOU SHOOK ME" + direction + " sound " + currentSoundIndex, Toast.LENGTH_SHORT).show();
                     shakeDirty = true;
+                    if (playChecked)
+                    {
+                        updatePlay();
+                    }
                 }
 
             }
@@ -217,6 +201,35 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
     }
 
+    public void updatePlay()
+    {
+        // if player is playing, stop and start with new looping set
+        if (myPlayer != null)
+        {
+            while (myPlayer.isPlaying())
+            {
+                // stop playback once the loop has completed (current position of track is at zero)
+                if (myPlayer.getCurrentPosition() == 0)
+                {
+                    stopPlay();
+                    break;
+                }
+            }
+
+            // if stopped because shake has occured, start playing with new sound
+            if (shakeDirty)
+            {
+                playSound(TabSwitcher.getmContext(), currentSoundIndex);
+            }
+
+        }
+
+        if (playChecked && loopingChecked || playChecked && shakeDirty)    // if it IS null and been checked start playing again
+        {
+            playSound(TabSwitcher.getmContext(), currentSoundIndex);
+        }
+
+    }
 
     // play
 
@@ -235,6 +248,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
         //myPlayer.getCurrentPosition() = 0!!
         myPlayer.start();
+        shakeDirty = false;
 
     }
 
