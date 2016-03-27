@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFFFF"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        />
 
     <TextView
         android:id="@+id/song_artist"

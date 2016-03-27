@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 public class OpenGLClass extends Fragment implements SensorEventListener {
 
+    private String TAG = "OpenGLClassFrag";
 
     // declare vars for accelerometer
     private SensorManager mySensorMan;
@@ -26,19 +28,24 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 50;
+    private final int SHAKE_THRESHOLD = 600;
 
     // declare reference notes
     // sounds from harri bionic http://freesound.org/people/harri/
     // under creative commons 3.0 attribute license http://creativecommons.org/licenses/by/3.0/
-    private static final int testNoteELow = R.raw.referencenoteelower;
-    private static final int testNoteA = R.raw.referencenotea;
-    private static final int testNoteD = R.raw.referencenoted;
-    private static final int testNoteG = R.raw.referencenoteg;
-    private static final int testNoteB = R.raw.referencenoteb;
-    private static final int testNoteEHigh = R.raw.referencenoteehigher;
+    private static final int testNoteELow = R.raw.refnote_el;
+    private static final int testNoteA = R.raw.refnote_a;
+    private static final int testNoteD = R.raw.refnote_d;
+    private static final int testNoteG = R.raw.refnote_g;
+    private static final int testNoteB = R.raw.refnote_b;
+    private static final int testNoteEHigh = R.raw.refnote_eh;
 
-    private static int currentSound = testNoteA;
+    private static int currentSoundIndex = 3;
+
+    private static boolean loopingChecked;
+
+    // initialise an array to store string id
+    private static final int[] myStrings = {testNoteELow, testNoteA, testNoteD, testNoteG, testNoteB, testNoteEHigh};
 
     // create new instance of my custom surface view
     private MyGLSurface myGLview;
@@ -59,7 +66,8 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         loopSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton btn, boolean isChecked) {
-                Toast.makeText(TabSwitcher.getmContext(), "switchy", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TabSwitcher.getmContext(), "looping is " + isChecked, Toast.LENGTH_SHORT).show();
+                loopingChecked = isChecked;
             }
         });
 
@@ -67,7 +75,14 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         playSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton btn, boolean isChecked) {
-                playSound(TabSwitcher.getmContext(), currentSound);
+                if (isChecked)
+                {
+                    playSound(TabSwitcher.getmContext(), currentSoundIndex);
+                }
+                else
+                {
+                    stopPlay();
+                }
             }
         });
 
@@ -85,7 +100,8 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
     {
         super.onResume();
         myGLview.onResume();  // calls the surface view's onResume when the activity onResume
-        mySensorMan.unregisterListener(this);
+
+        mySensorMan.registerListener(this, myAccel, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -93,15 +109,19 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
     {
         super.onPause();
         myGLview.onPause();
-        mySensorMan.registerListener(this, myAccel, SensorManager.SENSOR_DELAY_NORMAL);
+        mySensorMan.unregisterListener(this);
     }
 
     // implementation of interface
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         // this detects the gesture
         Sensor mySensor = event.sensor;
+
+        // increment for strings, changes with direction
+        int increment = 0;
 
         if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER)
         {
@@ -111,7 +131,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
             long curTime = System.currentTimeMillis();
 
-            if ((curTime - lastUpdate) > 300)
+            if ((curTime - lastUpdate) > 200)
             {
                 long diffTime = (curTime - lastUpdate);
                 lastUpdate = curTime;
@@ -125,23 +145,39 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
                 {
                     right = true;
                     direction = "Right";
+                    increment = 1;
                 }
                 else
                 {
                     right = false;
                     direction = "left";
+                    increment = -1;
                 }
 
                 speed = Math.abs(speed + y + z - last_y - last_z)/ diffTime * 10000;
 
                 if (speed > SHAKE_THRESHOLD)
                 {
-                    Toast.makeText(TabSwitcher.getmContext(), "YOU SHOOK ME" + direction, Toast.LENGTH_SHORT).show();
+                    // either positive or negative depending on the direction.
+                    currentSoundIndex += increment;
+
+                    if (currentSoundIndex < 0)
+                    {
+                        currentSoundIndex = myStrings.length - 1;
+                    }
+                    else if (currentSoundIndex > myStrings.length -1)
+                    {
+                        currentSoundIndex = 0;
+                    }
+
+                    Toast.makeText(TabSwitcher.getmContext(), "YOU SHOOK ME" + direction + " sound " + currentSoundIndex, Toast.LENGTH_SHORT).show();
+
                 }
-                last_x = x;
-                last_y = y;
-                last_z = z;
+
             }
+            last_x = x;
+            last_y = y;
+            last_z = z;
 
         }
     }
@@ -156,16 +192,31 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
     public void playSound(Context context, int soundID)
     {
+        Log.d(TAG, "sound playing sound ID " + soundID + " current sound " + currentSoundIndex);
         if (myPlayer != null)
         {
             myPlayer.reset();
             myPlayer.release();
         }
 
-        myPlayer = MediaPlayer.create(context, soundID);
+        myPlayer = MediaPlayer.create(context, myStrings[soundID]);
 
-        myPlayer.setLooping(true);
+
+        myPlayer.setLooping(loopingChecked);
+
         myPlayer.start();
     }
+
+    public void stopPlay()
+    {
+        if (myPlayer.isPlaying())
+        {
+            myPlayer.stop();
+            myPlayer.reset();
+            myPlayer.release();
+            myPlayer = null;
+        }
+    }
+
 
 }
