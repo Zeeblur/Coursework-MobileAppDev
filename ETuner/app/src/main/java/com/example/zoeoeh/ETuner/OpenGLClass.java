@@ -24,7 +24,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
     // declare vars for accelerometer
     private SensorManager mySensorMan;
     private Sensor myAccel;
-    private MediaPlayer myPlayer;
+    private static MediaPlayer myPlayer;
 
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
@@ -43,12 +43,15 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
     private static int currentSoundIndex = 3;
 
     private static boolean loopingChecked;
+    private static boolean playChecked;
 
     // initialise an array to store string id
     private static final int[] myStrings = {testNoteELow, testNoteA, testNoteD, testNoteG, testNoteB, testNoteEHigh};
 
     // create new instance of my custom surface view
     private MyGLSurface myGLview;
+
+    private boolean shakeDirty = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,8 +69,31 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         loopSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton btn, boolean isChecked) {
-                Toast.makeText(TabSwitcher.getmContext(), "looping is " + isChecked, Toast.LENGTH_SHORT).show();
+
+                // bool used for setting looping state of media player
                 loopingChecked = isChecked;
+
+                // if player is playing, stop and start with new looping set
+                if (myPlayer != null)
+                {
+                    Toast.makeText(TabSwitcher.getmContext(), "stopping loop" , Toast.LENGTH_SHORT).show();
+
+                    while (myPlayer.isPlaying())
+                    {
+                        // stop playback once the loop has completed (current position of track is at zero)
+                        if (myPlayer.getCurrentPosition() == 0)
+                        {
+                            stopPlay();
+                            break;
+                        }
+                    }
+
+                }
+
+                if (playChecked && loopingChecked)    // if it IS null and been checked start playing again
+                {
+                    playSound(TabSwitcher.getmContext(), currentSoundIndex);
+                }
             }
         });
 
@@ -75,13 +101,18 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         playSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton btn, boolean isChecked) {
+                playChecked = isChecked;
                 if (isChecked)
                 {
                     playSound(TabSwitcher.getmContext(), currentSoundIndex);
                 }
                 else
                 {
-                    stopPlay();
+                    // if unchecked and player isn't null stop it.
+                    if (myPlayer != null)
+                    {
+                        stopPlay();
+                    }
                 }
             }
         });
@@ -89,7 +120,6 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         mySensorMan = (SensorManager) TabSwitcher.getmContext().getSystemService(Context.SENSOR_SERVICE);
         myAccel = mySensorMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mySensorMan.registerListener(this, myAccel, SensorManager.SENSOR_DELAY_NORMAL);
-
 
         // return this view
         return myView;
@@ -171,7 +201,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
                     }
 
                     Toast.makeText(TabSwitcher.getmContext(), "YOU SHOOK ME" + direction + " sound " + currentSoundIndex, Toast.LENGTH_SHORT).show();
-
+                    shakeDirty = true;
                 }
 
             }
@@ -201,10 +231,11 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
         myPlayer = MediaPlayer.create(context, myStrings[soundID]);
 
-
         myPlayer.setLooping(loopingChecked);
 
+        //myPlayer.getCurrentPosition() = 0!!
         myPlayer.start();
+
     }
 
     public void stopPlay()
@@ -217,6 +248,8 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
             myPlayer = null;
         }
     }
+
+
 
 
 }
