@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">InputAudio</string>
+    <string name="recString">Record!</string>
+    <string name="loopBtn">Loop</string>
+    <string name="playBtn">Play</string>
+    <string name="checkB">Check File Name</string>
+    <string name="switchTxt">Switch screen</string>
+    <string name="playBtnRes">Play Tune</string>
+    <string name="pauseBtnRes">Pause</string>
+    <string name="app_play">Play</string>
+    <string name="app_rec">Record</string>
+    <string name="app_tune">Tune</string>
+    <string name="desc">Enter description: (Optional)</string>
+    <string name="fileName">Enter Filename: </string>
+    <string name="tempName">audio_recording</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
