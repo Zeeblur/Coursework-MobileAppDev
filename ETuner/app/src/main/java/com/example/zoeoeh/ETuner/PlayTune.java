@@ -104,13 +104,17 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
             int titleColumn = soundCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
             int idColumn = soundCursor.getColumnIndex(MediaStore.Audio.Media._ID);
             int artistColumn = soundCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+            int albumColumn = soundCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
 
             // iterate through database and add audioclips to list
             do {
                 long thisId = soundCursor.getLong(idColumn);
                 String thisTitle = soundCursor.getString(titleColumn);
                 String thisArtist = soundCursor.getString(artistColumn);
-                clipList.add(new AudioClip(thisId, thisTitle, thisArtist));
+                if (soundCursor.getString(albumColumn).equals(Recorder.albumName))
+                {
+                    clipList.add(new AudioClip(thisId, thisTitle, thisArtist));
+                }
             }
             while (soundCursor.moveToNext());
 

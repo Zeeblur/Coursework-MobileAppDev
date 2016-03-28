@@ -39,6 +39,8 @@ public class Recorder extends Fragment {
 
     private File tempFile;
 
+    public final static String albumName = "ETunerRecordings";
+    private String defaultDescription = "My Recording";
     //TODO get count for temporary recording
 
     private void prepareRec()
@@ -155,8 +157,11 @@ public class Recorder extends Fragment {
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
-        final EditText userInput = (EditText) promptsView
+        final EditText userInputName = (EditText) promptsView
                 .findViewById(R.id.editTextDialogUserInput);
+
+        final EditText userInputDesc = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserDescription);
 
         // set dialog message
         alertDialogBuilder
@@ -193,12 +198,16 @@ public class Recorder extends Fragment {
                 // get user input and set it to result
                 // edit text
 
-                boolean valid = validateInputFileName(userInput.getText().toString());
+                boolean valid = validateInputFileName(userInputName.getText().toString());
 
                 if (valid)
                 {
                     alertDialog.dismiss();
-                    insertFileIntoDatabase(userInput.getText().toString());
+                    if (userInputDesc.getText() != null)
+                    {
+                        defaultDescription = userInputDesc.getText().toString();
+                    }
+                    insertFileIntoDatabase(userInputName.getText().toString(), defaultDescription);
                 }
             }
         });
@@ -216,7 +225,7 @@ public class Recorder extends Fragment {
     }
 
 
-    public void insertFileIntoDatabase(String fileName)
+    public void insertFileIntoDatabase(String fileName, String fileDesc)
     {
         File mySound = new File(recDir, fileName + fileExt);
 
@@ -230,6 +239,8 @@ public class Recorder extends Fragment {
         ContentValues values = new ContentValues(4);
         long current = System.currentTimeMillis();
         values.put(MediaStore.Audio.Media.TITLE, fileName);
+        values.put(MediaStore.Audio.Media.ARTIST, fileDesc);
+        values.put(MediaStore.Audio.Media.ALBUM, albumName);
         values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (current / 1000));
         values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/AAC");
         values.put(MediaStore.Audio.Media.DATA, mySound.getAbsolutePath());
