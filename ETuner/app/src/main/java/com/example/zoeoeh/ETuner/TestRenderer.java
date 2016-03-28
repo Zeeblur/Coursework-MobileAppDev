@@ -6,13 +6,13 @@ import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.renderscript.Float2;
 import android.renderscript.Float3;
-import android.renderscript.Float4;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -44,6 +44,15 @@ public class TestRenderer implements GLSurfaceView.Renderer {
     private final FloatBuffer cubeNormals;
     private final FloatBuffer cubeColoursStrings;
 
+    private static FloatBuffer cylinderNormals;
+    private static FloatBuffer cylinderPositions;
+    private static FloatBuffer cylinderColours;
+
+
+    private int numberOfVerticesCube = 0;
+    private int numberOfVerticesCylinder = 0;
+
+
     // Handle used for passing in full MVP transformation matrix to the shader program
     private int mMVPMatrixHandle;
 
@@ -68,6 +77,9 @@ public class TestRenderer implements GLSurfaceView.Renderer {
     private float[] initialTranslation = new float[3];
     private float[] totalTranslation = new float[3];
     private float[] translateBy = new float[3];
+
+    // hold normal data
+    private ArrayList<Float> normals = new ArrayList<>();
 
     /**
      * Used to hold a light centered on the origin in model space. We need a 4th coordinate so we can get translations to work when
@@ -300,7 +312,15 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         cubeNormals = ByteBuffer.allocateDirect(cubeNormalData.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
         cubeNormals.put(cubeNormalData).position(0);
+
+        createCylinderGeometry();
+
+        // how many vertices length / size of data
+        numberOfVerticesCube = cubePositionData.length;
+        numberOfVerticesCube /= mPositionDataSize;
     }
+
+
 
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
@@ -492,65 +512,65 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMV(mLightPosInWorldSpace, 0, mLightModelMatrix, 0, mLightPosInModelSpace, 0);
         Matrix.multiplyMV(mLightPosInEyeSpace, 0, mViewMatrix, 0, mLightPosInWorldSpace, 0);
 
-
+/*
         // guitar head
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, 1.5f, -7.0f);
         //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.scaleM(mModelMatrix, 0, 2.5f, 3.25f, 1.0f);
-        drawCube(cubeColoursHead);
+        drawCube(cubePositions, cubeColoursHead, cubeNormals, numberOfVerticesCube);
 
         // guitar neck
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, -3.0f, -7.0f);
         //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.scaleM(mModelMatrix, 0, 1.75f, 2.5f, 1.0f);
-        drawCube(cubeColoursHead);
+        drawCube(cubePositions, cubeColoursHead, cubeNormals, numberOfVerticesCube);
 
-        //GLES20.glUseProgram(dispProgramHandle);
+        //GLES20.glUseProgram(dispProgramHandle);*/
 
         // 1st string
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, -1.25f, -2.0f, -6.5f);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -6.0f);
 //        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubeColoursStrings);
+        Matrix.scaleM(mModelMatrix, 0, 1.1f, 1.1f, 1.0f);
+        drawCube(cylinderPositions, cylinderColours, cylinderNormals, numberOfVerticesCylinder);
 
-        // 2nd string
+  /*      // 2nd string
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, -0.75f, -1.5f, -6.5f);
 //        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
         Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubeColoursStrings);
+        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
 
         // 3rd string
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, -0.25f, -1.5f, -6.5f);
 //        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
         Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubeColoursStrings);
+        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
 
         // 4th string
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.25f, -1.5f, -6.5f);
 //        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
         Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubeColoursStrings);
+        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
 
         // 5th string
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.75f, -1.5f, -6.5f);
 //        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
         Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubeColoursStrings);
+        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
 
         // 6th string
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 1.25f, -2.0f, -6.5f);
 //        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
         Matrix.scaleM(mModelMatrix, 0, 0.15f, 2.5f, 1.0f);
-        drawCube(cubeColoursStrings);
-
+        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
+*/
         // update translation
 
         for (int i = 0; i < totalTranslation.length; i++) {
@@ -585,11 +605,11 @@ public class TestRenderer implements GLSurfaceView.Renderer {
     /**
      * Draws a cube.
      */
-    private void drawCube(FloatBuffer colours) {
+    private void drawCube(FloatBuffer positions, FloatBuffer colours, FloatBuffer normals, int numberOfVertices) {
         // Pass in the position information
-        cubePositions.position(0);
+        positions.position(0);
         GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
-                0, cubePositions);
+                0, positions);
 
         GLES20.glEnableVertexAttribArray(mPositionHandle);
 
@@ -601,9 +621,9 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnableVertexAttribArray(mColorHandle);
 
         // Pass in the normal information
-        cubeNormals.position(0);
+        normals.position(0);
         GLES20.glVertexAttribPointer(mNormalHandle, mNormalDataSize, GLES20.GL_FLOAT, false,
-                0, cubeNormals);
+                0, normals);
 
         GLES20.glEnableVertexAttribArray(mNormalHandle);
 
@@ -625,7 +645,8 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         GLES20.glUniform3f(mLightPosHandle, mLightPosInEyeSpace[0], mLightPosInEyeSpace[1], mLightPosInEyeSpace[2]);
 
         // Draw the cube.
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, numberOfVertices);
     }
 
     /**
@@ -739,10 +760,10 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         //int slices,const glm::vec3 & dims)
 
         // Declare required buffers - positions, normals, texture coordinates and colour
-        ArrayList<Float3> positions = new ArrayList<>();
-        ArrayList<Float3> normals = new ArrayList<>();
+        ArrayList<Float> positions = new ArrayList<>();
+
         ArrayList<Float2> tex_coords = new ArrayList<>();
-        ArrayList<Float4> colours = new ArrayList<>();
+        ArrayList<Float> colours = new ArrayList<>();
 
         // vars for calculations default dimensions
         int stacks = 20;
@@ -772,21 +793,16 @@ public class TestRenderer implements GLSurfaceView.Renderer {
             curr_vert.y = (curr_vert.y / 2.0f) * dims.y;
             curr_vert.z = (curr_vert.z / 2.0f) * dims.z;
 
-            // Recalculate minimal and maximal
-            // Recalculate minimal and maximal
-            //minimal = glm::min (minimal, curr_vert);
-            //maximal = glm::max (maximal, curr_vert);
-
             // Push back vertices
-            positions.add(centre);
-            positions.add(prev_vert);
-            positions.add(curr_vert);
+            positions.addAll(Arrays.asList(centre.x, centre.y, centre.z));
+            positions.addAll(Arrays.asList(prev_vert.x, prev_vert.y, prev_vert.z));
+            positions.addAll(Arrays.asList(curr_vert.x, curr_vert.y, curr_vert.z));
 
             // Push back normals and colours
             for (int j = 0; j< 3; ++j)
             {
-                normals.add(new Float3(0.0f, 1.0f, 0.0f));
-                colours.add(new Float4(0.7f, 0.7f, 0.7f, 1.0f));
+                normals.addAll(Arrays.asList(0.0f, 1.0f, 0.0f));
+                colours.addAll(Arrays.asList(0.7f, 0.7f, 0.7f, 1.0f));
             }
 
             // Push back tex coordinates
@@ -814,15 +830,15 @@ public class TestRenderer implements GLSurfaceView.Renderer {
             curr_vert.z = (curr_vert.z / 2.0f) * dims.z;
 
             // Push back vertices
-            positions.add(centre);
-            positions.add(prev_vert);
-            positions.add(curr_vert);
+            positions.addAll(Arrays.asList(centre.x, centre.y, centre.z));
+            positions.addAll(Arrays.asList(prev_vert.x, prev_vert.y, prev_vert.z));
+            positions.addAll(Arrays.asList(curr_vert.x, curr_vert.y, curr_vert.z));
 
             // Push back normals and colours
             for (int j = 0; j< 3; ++j)
             {
-                normals.add(new Float3(0.0f, -1.0f, 0.0f));
-                colours.add(new Float4(0.7f, 0.7f, 0.7f, 1.0f));
+                normals.addAll(Arrays.asList(0.0f, -1.0f, 0.0f));
+                colours.addAll(Arrays.asList(0.7f, 0.7f, 0.7f, 1.0f));
             }
 
             // Push back tex coordinates
@@ -837,6 +853,13 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         ArrayList<Float3> verts = new ArrayList<>();
         ArrayList<Float2> coords = new ArrayList<>();
 
+        Float3 tempFloat = new Float3(0.0f, 0.0f, 0.0f);
+        verts.add(tempFloat);
+        verts.add(tempFloat);
+        verts.add(tempFloat);
+        verts.add(tempFloat);
+
+
         // Delta height - scaled during vertex creation
         float delta_height = 2.0f / (float)stacks;
 
@@ -847,16 +870,16 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         float delta_width = circ / (float)slices;
 
         // Iterate through each stack
-        for (int i = 0; i<stacks; i++)
+        for (int i = 0; i<stacks; ++i)
         {
             // Iterate through each slice
             for (int j = 0; j<slices; ++j)
             {
                 // Calc vertices
-                verts.add(new Float3((float)Math.cos(j * delta_angle), 1.0f - (delta_height * i), (float)Math.sin(j * delta_angle)));
-                verts.add(new Float3((float)Math.cos((j + 1) * delta_angle), 1.0f - (delta_height * i),(float)Math.sin((j + 1) * delta_angle)));
-                verts.add(new Float3((float)Math.cos(j * delta_angle), 1.0f - (delta_height * (i + 1)), (float)Math.sin(j * delta_angle)));
-                verts.add(new Float3((float)Math.cos((j + 1) * delta_angle), 1.0f - (delta_height * (i + 1)), (float)Math.sin((j + 1) * delta_angle)));             ;
+                verts.set(0, new Float3((float)Math.cos(j * delta_angle), 1.0f - (delta_height * i), (float)Math.sin(j * delta_angle)));
+                verts.set(1, new Float3((float)Math.cos((j + 1) * delta_angle), 1.0f - (delta_height * i),(float)Math.sin((j + 1) * delta_angle)));
+                verts.set(2, new Float3((float)Math.cos(j * delta_angle), 1.0f - (delta_height * (i + 1)), (float)Math.sin(j * delta_angle)));
+                verts.set(3, new Float3((float)Math.cos((j + 1) * delta_angle), 1.0f - (delta_height * (i + 1)), (float)Math.sin((j + 1) * delta_angle)));             ;
 
                 // Scale by 0.5 * dims
                 for (Float3 v :verts)
@@ -867,55 +890,85 @@ public class TestRenderer implements GLSurfaceView.Renderer {
                 }
 
                 // Calculate texture coordinates
-                coords.add(new Float2((-delta_width * j) / (float)Math.PI, dims.y - ((delta_height * i * dims.y) / 2.0f)));
-                coords.add(new Float2((-delta_width * (j + 1)) / (float)Math.PI, dims.y - ((delta_height * i * dims.y) / 2.0f)));
-                coords.add(new Float2((-delta_width * j) /(float)Math.PI, dims.y - ((delta_height * (i + 1) * dims.y) / 2.0f)));
-                coords.add(new Float2((-delta_width * (j + 1)) / (float)Math.PI, dims.y - ((delta_height * (i + 1) * dims.y) / 2.0f)));
+                /*
+                coords.set(0, new Float2((-delta_width * j) / (float)Math.PI, dims.y - ((delta_height * i * dims.y) / 2.0f)));
+                coords.set(1, new Float2((-delta_width * (j + 1)) / (float)Math.PI, dims.y - ((delta_height * i * dims.y) / 2.0f)));
+                coords.set(2, new Float2((-delta_width * j) / (float) Math.PI, dims.y - ((delta_height * (i + 1) * dims.y) / 2.0f)));
+                coords.set(3, new Float2((-delta_width * (j + 1)) / (float) Math.PI, dims.y - ((delta_height * (i + 1) * dims.y) / 2.0f)));*/
 
                 // Triangle 1
-                positions.add(verts.get(0));
-                normals.add(normalise(new Float3(verts.get(0).x, 0.0f, verts.get(0).z)));
-                tex_coords.add(coords.get(0));
-                positions.add(verts.get(3));
-                normals.add(normalise(new Float3(verts.get(3).x, 0.0f, verts.get(3).z)));
-                tex_coords.add(coords.get(3));
-                positions.add(verts.get(2));
-                normals.add(normalise(new Float3(verts.get(2).x, 0.0f, verts.get(2).z)));
-                tex_coords.add(coords.get(2));
+                positions.addAll(Arrays.asList(verts.get(0).x, verts.get(0).y, verts.get(0).z));
+
+                normaliseAddToList(new Float3(verts.get(0).x, 0.0f, verts.get(0).z));
+
+
+               // tex_coords.add(coords.get(0));
+                positions.addAll(Arrays.asList(verts.get(3).x, verts.get(3).y, verts.get(3).z));
+                normaliseAddToList(new Float3(verts.get(3).x, 0.0f, verts.get(3).z));
+              //  tex_coords.add(coords.get(3));
+                positions.addAll(Arrays.asList(verts.get(2).x, verts.get(2).y, verts.get(2).z));
+                normaliseAddToList(new Float3(verts.get(2).x, 0.0f, verts.get(2).z));
+              //  tex_coords.add(coords.get(2));
 
                 // Triangle 2
-                positions.add(verts.get(0));
-                normals.add(normalise(new Float3(verts.get(0).x, 0.0f, verts.get(0).z)));
-                tex_coords.add(coords.get(0));
-                positions.add(verts.get(1));
-                normals.add(normalise(new Float3(verts.get(1).x, 0.0f, verts.get(1).z)));
-                tex_coords.add(coords.get(1));
-                positions.add(verts.get(3));
-                normals.add(normalise(new Float3(verts.get(3).x, 0.0f, verts.get(3).z)));
-                tex_coords.add(coords.get(3));
+                positions.addAll(Arrays.asList(verts.get(0).x, verts.get(0).y, verts.get(0).z));
+                normaliseAddToList(new Float3(verts.get(0).x, 0.0f, verts.get(0).z));
+             //   tex_coords.add(coords.get(0));
+                positions.addAll(Arrays.asList(verts.get(1).x, verts.get(1).y, verts.get(1).z));
+                normaliseAddToList(new Float3(verts.get(1).x, 0.0f, verts.get(1).z));
+              //  tex_coords.add(coords.get(1));
+                positions.addAll(Arrays.asList(verts.get(3).x, verts.get(3).y, verts.get(3).z));
+                normaliseAddToList(new Float3(verts.get(3).x, 0.0f, verts.get(3).z));
+             //   tex_coords.add(coords.get(3));
 
                 // Colours
                 for (int k = 0; k< 6; ++k)
-                colours.add(new Float4 (0.7f, 0.7f, 0.7f, 1.0f));
+                colours.addAll(Arrays.asList(0.7f, 0.7f, 0.7f, 1.0f));
             }
         }
 
-        /*
+
 
         // Add buffers
-        float[] arrayNormals = normals.toArray(new float[normals.size()]);
+        float[] arrayNormals = new float[normals.size()];
+        int i = 0;
 
-        cylinderNormals = ByteBuffer.allocateDirect(cubeNormalData.length * mBytesPerFloat)
+        for (Float f : normals) {
+            arrayNormals[i++] = (f != null ? f : Float.NaN);
+        }
+       // Float[] arrayNormals = normals.toArray(new Float[normals.size()]);
+
+        cylinderNormals = ByteBuffer.allocateDirect(normals.size() * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        cylinderNormals.put(normals).position(0);
+        cylinderNormals.put(arrayNormals).position(0);
 
-        ArrayList<Float> myNormals; */
+        cylinderColours = addToBuffer(cylinderColours, colours);
+        cylinderPositions = addToBuffer(cylinderPositions, positions);
+
+        // how many vertices length / size of data
+        numberOfVerticesCylinder = positions.size();
+        numberOfVerticesCylinder /= mPositionDataSize;
 
     }
 
-    private FloatBuffer cylinderNormals;
+    private FloatBuffer addToBuffer(FloatBuffer myBuffer, ArrayList<Float> myList)
+    {
+        float[] myListAsPrimArray = new float[myList.size()];
+        int i = 0;
 
-    public Float3 normalise(Float3 myVec)
+        for (Float f : myList)
+        {
+            myListAsPrimArray[i++] = f;//(f != null ? f : Float.NaN);
+        }
+
+        myBuffer = ByteBuffer.allocateDirect(myList.size() * mBytesPerFloat)
+                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        myBuffer.put(myListAsPrimArray).position(0);
+
+        return myBuffer;
+    }
+
+    public void normaliseAddToList(Float3 myVec)
     {
         // normalises input
         Float3 result = myVec;
@@ -935,7 +988,9 @@ public class TestRenderer implements GLSurfaceView.Renderer {
             result.z /= mag;
         }
 
-        return result;
+        normals.add(result.x);
+        normals.add(result.y);
+        normals.add(result.z);
     }
 }
 
