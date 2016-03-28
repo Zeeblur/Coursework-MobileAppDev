@@ -92,6 +92,8 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
                     if (myPlayer != null)
                     {
                         stopPlay();
+                        // stop vibrating of string
+                        TestRenderer.setChosenString(-1);
                     }
                 }
             }
@@ -243,6 +245,8 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         }
 
         myPlayer = MediaPlayer.create(context, myStrings[soundID]);
+
+        TestRenderer.setChosenString(soundID);
 
         myPlayer.setLooping(loopingChecked);
 

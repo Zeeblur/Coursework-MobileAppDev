@@ -80,6 +80,7 @@ public class TestRenderer implements GLSurfaceView.Renderer {
 
     // hold initial x translations for each string
     private final float[] xTranslationsStrings = {-1.5f,-0.9f,-0.3f, 0.3f, 0.9f, 1.5f};
+    private static boolean[] chosenStringBool = {false, false, false, false, false, false};
 
     // hold normal data
     private ArrayList<Float> normals = new ArrayList<>();
@@ -390,43 +391,6 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         return vertexShader;
     }
 
-    // vertex shader for moving string, - displaces vertex in y position
-    /*
-    protected String getVertexShaderDisplace()
-    {
-        final String vertexShader =
-            "uniform mat4 u_MVPMatrix;      \n"        // A constant representing the combined model/view/projection matrix.
-                    + "uniform mat4 u_MVMatrix;       \n"        // A constant representing the combined model/view matrix.
-
-                    + "attribute vec4 a_Position;     \n"        // Per-vertex position information we will pass in.
-                    + "attribute vec4 a_Colour;        \n"        // Per-vertex color information we will pass in.
-                    + "attribute vec3 a_Normal;       \n"        // Per-vertex normal information we will pass in.
-
-                    + "varying vec3 v_Position;       \n"        // This will be passed into the fragment shader.
-                    + "varying vec4 v_Colour;          \n"        // This will be passed into the fragment shader.
-                    + "varying vec3 v_Normal;         \n"        // This will be passed into the fragment shader.
-
-                    // The entry point for our vertex shader.
-                    + "void main()                                                \n"
-                    + "{                                                          \n"
-
-                    + " v_Position = vec3(a_Position.x, a_Position.y, a_Position.z); \n"
-                    //+ " v_Position.y += sin(v_Position.x)*0.4; \n"
-                    // Transform the vertex into eye space.
-                    + "   v_Position = vec3(u_MVMatrix * v_Position);             \n"
-                    // Pass through the color.
-                    + "   v_Colour = a_Colour;                                      \n"
-                    // Transform the normal's orientation into eye space.
-                    + "   v_Normal = vec3(u_MVMatrix * vec4(a_Normal, 0.0));      \n"
-                    // gl_Position is a special variable used to store the final position.
-                    // Multiply the vertex by the matrix to get the final point in normalized screen coordinates.
-                    + "   gl_Position = u_MVPMatrix * a_Position;                 \n"
-                    + "}                                                          \n";
-
-        return vertexShader;
-    }*/
-
-
     protected String getFragmentShader() {
         final String fragmentShader =
                 "precision mediump float;       \n"        // Set the default precision to medium. We don't need as high of a
@@ -519,12 +483,12 @@ public class TestRenderer implements GLSurfaceView.Renderer {
 
         //GLES20.glUseProgram(dispProgramHandle);
 
-        drawString(0, true);
-        drawString(1, false);
-        drawString(2, false);
-        drawString(3, false);
-        drawString(4, false);
-        drawString(5, false);
+        drawString(0, chosenStringBool[0]);
+        drawString(1, chosenStringBool[1]);
+        drawString(2, chosenStringBool[2]);
+        drawString(3, chosenStringBool[3]);
+        drawString(4, chosenStringBool[4]);
+        drawString(5, chosenStringBool[5]);
 
     }
 
@@ -550,6 +514,7 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         {
             // don't move
             translationAdjustment[0] = 0.0f;
+            totalTranslation[0] = 0.0f;
         }
         // update translation
 
@@ -964,5 +929,18 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         normals.add(result.y);
         normals.add(result.z);
     }
+
+
+    public static void setChosenString(int stringIndex)
+    {
+        // iterate through array set all to false
+        for (int i = 0; i < chosenStringBool.length; ++i)
+            chosenStringBool[i] = false;
+
+        // set new chosen string
+        if (stringIndex >= 0)
+            chosenStringBool[stringIndex] = true;
+    }
+
 }
 
