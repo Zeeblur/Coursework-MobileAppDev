@@ -249,7 +249,7 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         });
 
         controller.setMediaPlayer(this);
-        controller.setAnchorView(myView.findViewById(R.id.clipList));
+        controller.setAnchorView(myView.findViewById(R.id.spaceForController));
         controller.setEnabled(true);
 
     }

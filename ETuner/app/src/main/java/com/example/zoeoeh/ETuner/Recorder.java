@@ -32,7 +32,7 @@ public class Recorder extends Fragment {
     private String recDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/Test/";
     private String fileExt = ".AAC";
 
-    private String tempName= "audio_recording";
+    private String tempName= "audioRecording";
 
     private String temporaryRecording = recDir + tempName;
     private int tempRecNameCount = 0;
@@ -41,11 +41,10 @@ public class Recorder extends Fragment {
 
     public final static String albumName = "ETunerRecordings";
     private String defaultDescription = "My Recording";
-    //TODO get count for temporary recording
+    //TODO last file null pointer
 
     private void prepareRec()
     {
-        //TODO validate temporary file name
         // instantiate new media recorder and set up sources/formats
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -94,8 +93,7 @@ public class Recorder extends Fragment {
                 if (recorder == null)
                 {
                     // add one to count of recordings
-                    tempRecNameCount++;
-                    temporaryRecording = recDir + tempName + tempRecNameCount + fileExt;
+                    temporaryRecording = recDir + tempName + "0" + fileExt;
                     prepareRec();
 
                     // throws exception if called before prepare()
@@ -163,6 +161,20 @@ public class Recorder extends Fragment {
         final EditText userInputDesc = (EditText) promptsView
                 .findViewById(R.id.editTextDialogUserDescription);
 
+
+        // This is for checking the temporary name
+        File fileCheck = new File(recDir + tempName + tempRecNameCount + fileExt);
+
+        // if file name exists add count. This will allow for count to persist throughout close
+        while(fileCheck.exists())
+        {
+            tempRecNameCount++;
+            fileCheck = new File(recDir + tempName + tempRecNameCount + fileExt);
+        }
+
+        userInputName.setText(tempName + tempRecNameCount);
+        userInputDesc.setText(defaultDescription);
+
         // set dialog message
         alertDialogBuilder
                 .setCancelable(false) // cannot cancel
@@ -203,10 +215,9 @@ public class Recorder extends Fragment {
                 if (valid)
                 {
                     alertDialog.dismiss();
-                    if (userInputDesc.getText() != null)
-                    {
-                        defaultDescription = userInputDesc.getText().toString();
-                    }
+
+                    defaultDescription = userInputDesc.getText().toString();
+
                     insertFileIntoDatabase(userInputName.getText().toString(), defaultDescription);
                 }
             }
@@ -252,8 +263,6 @@ public class Recorder extends Fragment {
         TabSwitcher.getmContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
         Toast.makeText(TabSwitcher.getmContext(), "Added File " + newUri, Toast.LENGTH_LONG).show();
 
-        //TODO add description and fix all showing
-
         // sets dirty flag for updating list from database
         TabSwitcher.setListDirty(true);
     }
@@ -283,8 +292,16 @@ public class Recorder extends Fragment {
             }
         }
 
+        // ensures name is entered
+        if(input.length() < 1)
+        {
+            Toast.makeText(TabSwitcher.getmContext(), "Filename cannot be blank", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
 
     }
 
+    //TODO sort out menu bar
 }
