@@ -53,6 +53,9 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
     private boolean shakeDirty = false;
 
+    private Switch playSwitch;
+    private Switch loopSwitch;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,7 +68,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         myGLview = (MyGLSurface) myView.findViewById(R.id.surfaceView);
 
         // switch handler for change events. controls looping of sound playing
-        Switch loopSwitch = (Switch)myView.findViewById(R.id.loopSwitch);
+        loopSwitch = (Switch)myView.findViewById(R.id.loopSwitch);
         loopSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton btn, boolean isChecked) {
@@ -77,7 +80,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
             }
         });
 
-        Switch playSwitch = (Switch)myView.findViewById(R.id.playSwitch);
+        playSwitch = (Switch)myView.findViewById(R.id.playSwitch);
         playSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton btn, boolean isChecked) {
@@ -103,6 +106,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         myAccel = mySensorMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mySensorMan.registerListener(this, myAccel, SensorManager.SENSOR_DELAY_NORMAL);
 
+        //TODO tap for next string?
         // return this view
         return myView;
     }
@@ -250,12 +254,12 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
         myPlayer.setLooping(loopingChecked);
 
-        //myPlayer.getCurrentPosition() = 0!!
         myPlayer.start();
         shakeDirty = false;
 
     }
 
+    // stop playback and release media player/pointer if playing
     public void stopPlay()
     {
         if (myPlayer.isPlaying())
@@ -267,7 +271,21 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         }
     }
 
+    // if tab is invisible ensure to stop playback
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
 
+        if (this.isVisible())
+        {
+            if (!isVisibleToUser)
+            {
+                // set switches to false
+                playSwitch.setChecked(false);
+                loopSwitch.setChecked(false);
 
+            }
+        }
+    }
 
 }

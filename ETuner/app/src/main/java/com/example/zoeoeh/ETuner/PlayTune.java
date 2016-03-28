@@ -221,6 +221,13 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
     // click handler for clip view
     public void clipPicked(View view) {
         myService.pickClip(Integer.parseInt(view.getTag().toString()));
+
+        // change colour when picked to show selection
+
+        // resets current playing colour
+        myService.resetColour();
+        // change picked colour
+        view.setBackgroundColor(view.getResources().getColor(R.color.darkerBlue));
         myService.startPlaying();
         if (playbackPaused)
         {

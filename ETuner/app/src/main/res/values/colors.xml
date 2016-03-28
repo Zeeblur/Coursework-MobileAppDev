@@ -6,4 +6,5 @@
     <color name="tabTextCol">#000000</color>
     <color name="backgroundGrey">#5E5C5D</color>
     <color name="highlightBlue">#5ABFD1</color>
+    <color name="darkerBlue">#117AB1</color>
 </resources>

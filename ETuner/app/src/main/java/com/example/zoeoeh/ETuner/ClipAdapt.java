@@ -17,6 +17,7 @@ public class ClipAdapt extends BaseAdapter {
 
     private ArrayList<AudioClip> clips;
     private final LayoutInflater clipInflater;
+    public static ArrayList<LinearLayout> myClipLayouts = new ArrayList<>();
 
     public ClipAdapt(Context c, ArrayList<AudioClip> theClips)
     {
@@ -46,6 +47,7 @@ public class ClipAdapt extends BaseAdapter {
         //map to song layout
         LinearLayout clipLayout = (LinearLayout)clipInflater.inflate
                 (R.layout.clip, parent, false);
+
         //get title and artist views
         TextView songView = (TextView)clipLayout.findViewById(R.id.song_title);
         TextView artistView = (TextView)clipLayout.findViewById(R.id.song_artist);
@@ -56,6 +58,11 @@ public class ClipAdapt extends BaseAdapter {
         artistView.setText(currSong.getDescription());
         //set position as tag
         clipLayout.setTag(listPosition);
+
+        // add to list to allow colour control
+        myClipLayouts.add(clipLayout);
+
         return clipLayout;
     }
+
 }

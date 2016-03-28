@@ -121,6 +121,14 @@ public class SoundService extends Service implements
         // get clip from list, model as a URI
         AudioClip playingClip = clips.get(currentPos);
 
+        // iterate through list of clip layouts. Find the playing clip and change it's colour
+        for (int i = 0; i < ClipAdapt.myClipLayouts.size(); ++i )
+        {
+            if (currentPos == ClipAdapt.myClipLayouts.get(i).getTag()){
+                ClipAdapt.myClipLayouts.get(i).setBackgroundColor(getResources().getColor(R.color.darkerBlue));
+            }
+        }
+
         long currentClip = playingClip.getID();
 
         Uri trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -169,6 +177,9 @@ public class SoundService extends Service implements
     }
 
     public void playPrev(){
+        // resets current playing colour
+        resetColour();
+
         currentPos--;
 
         if(currentPos < 0)
@@ -179,12 +190,23 @@ public class SoundService extends Service implements
     }
 
     public void playNext(){
+        // resets current playing colour
+        resetColour();
         currentPos++;
-        if(currentPos > clips.size())
+        if(currentPos >= clips.size())
         {
             currentPos=0;
         }
         startPlaying();
+    }
+
+    public void resetColour()
+    {
+        // iterate through list of clip layouts and reset the colour to standard background
+        for (int i = 0; i < ClipAdapt.myClipLayouts.size(); ++i )
+        {
+            ClipAdapt.myClipLayouts.get(i).setBackgroundColor(getResources().getColor(R.color.backgroundGrey));
+        }
     }
 
 }
