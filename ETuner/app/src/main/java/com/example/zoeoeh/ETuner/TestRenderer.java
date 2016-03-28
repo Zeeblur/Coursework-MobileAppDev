@@ -72,11 +72,14 @@ public class TestRenderer implements GLSurfaceView.Renderer {
     private final int mNormalDataSize = 3;
 
     // float arrays for translation vectors
-    private float[] translationAdjustment = new float[3];
-    private float[] maxTranslation = new float[3];
-    private float[] initialTranslation = new float[3];
-    private float[] totalTranslation = new float[3];
-    private float[] translateBy = new float[3];
+    private float[] maxTranslation = { 0.1f, 0.0f, 0.0f};
+
+    // translation/adjustements in x for each string
+    private float[] totalTranslationx = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    private float[] adjustmentX = {0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f};
+
+    // hold initial x translations for each string
+    private final float[] xTranslationsStrings = {-1.5f,-0.9f,-0.3f, 0.3f, 0.9f, 1.5f};
 
     // hold normal data
     private ArrayList<Float> normals = new ArrayList<>();
@@ -105,20 +108,6 @@ public class TestRenderer implements GLSurfaceView.Renderer {
 
     // constructor used to initialise all model data/ vertex/colour/normals
     public TestRenderer() {
-
-        //initialise translation arrays to zero
-        for (int i = 0; i < initialTranslation.length; i++) {
-            initialTranslation[i] = 0.0f;
-            maxTranslation[i] = 0.0f;
-            translationAdjustment[i] = 0.0f;
-            totalTranslation[i] = 0.0f;
-            translateBy[i] = 0.0f;
-        }
-
-        maxTranslation[0] = 1.5f;
-        translationAdjustment[0] = 0.01f;
-        initialTranslation[2] = -5.0f;
-
 
         // Define points for a cube.
 
@@ -313,11 +302,12 @@ public class TestRenderer implements GLSurfaceView.Renderer {
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
         cubeNormals.put(cubeNormalData).position(0);
 
-        createCylinderGeometry();
+        createCylinderGeometry(new Float3(0.25f, 5.0f, 0.25f));
 
         // how many vertices length / size of data
         numberOfVerticesCube = cubePositionData.length;
         numberOfVerticesCube /= mPositionDataSize;
+
     }
 
 
@@ -512,83 +502,30 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMV(mLightPosInWorldSpace, 0, mLightModelMatrix, 0, mLightPosInModelSpace, 0);
         Matrix.multiplyMV(mLightPosInEyeSpace, 0, mViewMatrix, 0, mLightPosInWorldSpace, 0);
 
-/*
+
         // guitar head
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, 1.5f, -7.0f);
         //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.scaleM(mModelMatrix, 0, 2.5f, 3.25f, 1.0f);
-        drawCube(cubePositions, cubeColoursHead, cubeNormals, numberOfVerticesCube);
+        drawGeometry(cubePositions, cubeColoursHead, cubeNormals, numberOfVerticesCube);
 
         // guitar neck
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, -3.0f, -7.0f);
         //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.scaleM(mModelMatrix, 0, 1.75f, 2.5f, 1.0f);
-        drawCube(cubePositions, cubeColoursHead, cubeNormals, numberOfVerticesCube);
+        drawGeometry(cubePositions, cubeColoursHead, cubeNormals, numberOfVerticesCube);
 
-        //GLES20.glUseProgram(dispProgramHandle);*/
+        //GLES20.glUseProgram(dispProgramHandle);
 
-        // 1st string
-        Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -6.0f);
-//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 1.1f, 1.1f, 1.0f);
-        drawCube(cylinderPositions, cylinderColours, cylinderNormals, numberOfVerticesCylinder);
+        drawString(0, true);
+        drawString(1, false);
+        drawString(2, false);
+        drawString(3, false);
+        drawString(4, false);
+        drawString(5, false);
 
-  /*      // 2nd string
-        Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, -0.75f, -1.5f, -6.5f);
-//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
-
-        // 3rd string
-        Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, -0.25f, -1.5f, -6.5f);
-//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
-
-        // 4th string
-        Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, 0.25f, -1.5f, -6.5f);
-//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
-
-        // 5th string
-        Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, 0.75f, -1.5f, -6.5f);
-//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 0.15f, 3.0f, 1.0f);
-        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
-
-        // 6th string
-        Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, 1.25f, -2.0f, -6.5f);
-//        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 0.15f, 2.5f, 1.0f);
-        drawCube(cubePositions, cubeColoursStrings, cubeNormals, numberOfVerticesCube);
-*/
-        // update translation
-
-        for (int i = 0; i < totalTranslation.length; i++) {
-            totalTranslation[i] += (translationAdjustment[i]);
-        }
-
-        //  totalTranslation += translationAdjustment * 0.5f;
-
-        // if the length squared is bigger than the max trans len2 OR smaller than zero, Swap sign (changes direction of translation)
-        // length squared is used as sqrt is expensive and not needed for this inequality
-        if ((length2(totalTranslation) > length2(maxTranslation)) || length2(totalTranslation) < 0) {
-            // swap signs for each element of array
-            translationAdjustment[0] = -translationAdjustment[0];
-        }
-
-        for (int i = 0; i < translateBy.length; i++) {
-            translateBy[i] = initialTranslation[i] + totalTranslation[i];
-        }
     }
 
     // return length squared of vector
@@ -602,10 +539,46 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         return result;
     }
 
-    /**
-     * Draws a cube.
-     */
-    private void drawCube(FloatBuffer positions, FloatBuffer colours, FloatBuffer normals, int numberOfVertices) {
+    private void drawString(int stringIndex, boolean isChosen)
+    {
+        float[] initialTranslation = { xTranslationsStrings[stringIndex], -1.5f, -6.0f };
+        float[] translateBy = { 0.0f, 0.0f, 0.0f };
+        float[] translationAdjustment = { adjustmentX[stringIndex], 0.0f, 0.0f};
+        float[] totalTranslation = { totalTranslationx[stringIndex], 0.0f, 0.0f};
+
+        if (!isChosen)
+        {
+            // don't move
+            translationAdjustment[0] = 0.0f;
+        }
+        // update translation
+
+        for (int i = 0; i < totalTranslation.length; i++) {
+            totalTranslation[i] += (translationAdjustment[i]* 0.05f);
+            totalTranslationx[stringIndex] += (translationAdjustment[i]* 0.05f);
+        }
+
+        // if the length squared is bigger than the max trans len2 OR smaller than zero, Swap sign (changes direction of translation)
+        // length squared is used as sqrt is expensive and not needed for this inequality
+        if ((length2(totalTranslation) > length2(maxTranslation)) || length2(totalTranslation) < 0) {
+            // swap signs for each element of array
+            translationAdjustment[0] = -translationAdjustment[0];
+            adjustmentX[stringIndex] = -adjustmentX[stringIndex];
+        }
+
+        for (int i = 0; i < translateBy.length; i++) {
+            translateBy[i] = initialTranslation[i] + totalTranslation[i];
+        }
+
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
+        Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
+        drawGeometry(cylinderPositions, cylinderColours, cylinderNormals, numberOfVerticesCylinder);
+
+    }
+
+
+    private void drawGeometry(FloatBuffer positions, FloatBuffer colours, FloatBuffer normals, int numberOfVertices) {
         // Pass in the position information
         positions.position(0);
         GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
@@ -755,7 +728,7 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         return programHandle;
     }
 
-    public void createCylinderGeometry() {
+    public void createCylinderGeometry(Float3 dims) {
         //geometry geometry_builder::create_cylinder(const unsigned int stacks,const unsigned
         //int slices,const glm::vec3 & dims)
 
@@ -768,7 +741,6 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         // vars for calculations default dimensions
         int stacks = 20;
         int slices = 20;
-        Float3 dims = new Float3(1.0f, 1.0f, 1.0f);
 
         // Create top
         Float3 centre = new Float3(0.0f, 0.5f*dims.y, 0.0f);
