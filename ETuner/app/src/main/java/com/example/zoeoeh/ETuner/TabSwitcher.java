@@ -39,9 +39,9 @@ public class TabSwitcher extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText(("Test")));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.app_rec));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.app_play));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.app_tune));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -98,30 +98,6 @@ public class TabSwitcher extends AppCompatActivity {
 
         });
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-
-        switch (item.getItemId()) {
-            case R.id.action_shuffle:
-                //shuffle
-                break;
-            case R.id.action_play:
-                PlayTune myTune = (PlayTune)adapter.getItem(1);
-                myTune.exitPlayer();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     // click handler for fragment xml clip

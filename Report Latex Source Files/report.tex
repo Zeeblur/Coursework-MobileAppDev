@@ -7,6 +7,7 @@
 \documentclass[conference]{acmsiggraph}
 
 \usepackage{graphicx}
+\usepackage{float}
 \graphicspath{{./images/}}
 \newcommand{\figuremacroW}[4]{
 	\begin{figure}[h] %[htbp]
@@ -119,15 +120,43 @@ This project aims to implement a mobile application prototype using the Android 
 %%An introduction to your assignment stating its scope and content – this
 %%should include a brief overview of your application choice and the
 %%inspiration for your choice. Reference your reading. 
+The initial aims of this project were to develop a mobile application for the android platform. The initial ideas were that of a chromatic guitar tuner app. On the market at the moment there are hundreds of guitar tuner applications however the successful ones all seem quite similar. Reading an article about the best guitar tuner apps, they all seem to have the same design feel towards them. \cite{bestApps} Most are chromatic, meaning it 'recognizes each of the twelve chromatic (semitone) steps of the equal-tempered scale (C, C\# D, D\#, E, F, F\#, G, G\# A, A\#, B)', \cite{Roland} which is useful as it can tune any instrument: and most of them are very complex, with many different features such as chord libraries and metronomes. Hardly any application within the top ten has a reference pitch section, and if they do, it's is almost always an extra feature. %%Therefore building an application that is slightly different. 
 
+\subsection{Related Work}
 
+\paragraph{DaTuner} One app that is very simple and particularly useful is the DaTuner. The free version of the application is very quick and simple to use, however if a user was looking for more, they will also find some advanced features within the pro version (see figure 2). DaTuner is a good application as it is very quick to use, it launches straight into a tuner which you can use automatically without any set-up or navigation.
+
+\paragraph{Martin Guitar Tuner} Another application that is inspirational is the C.F. Martin \& Co. Guitar Tuner App (see Figure 3). Overall it is not a very good application, it's uses a "hamburger" style navigation menu and it's tuner pages are low-quality images with very little user interaction. Hamburger menus, even though widely used, are not a good way of displaying menu items. They are useful in the sense that complex navigation can be hidden behind a button which saves screen space, but they are 'less efficient' due to the need of tapping the button before you can reach any options. They also make the ability to glance at an available interaction more difficult, which can lead to users forgetting that some features exist. \cite{hamburger} One good thing about the application is that it includes a very basic approach to an ear tuner. It is simple, you tap the tuning peg and the corresponding note plays, and that's it. Which is why it is inspiring to the project.
 
 \section{Software Design}
+
+\subsection{Design Decisions}
+
+A decision was made to favour a more simple app than some of the more feature-heavy application. This was due to the similarities of most applications already on the market, one of the project aims was to produce something different however still useful. The aim was to develop an application to be used as an everyday tool and not as a gimmick.
+
+When researching implementation of chromatic tuning software, it seemed a little beyond the scope of the assignment. The biggest issue with the implementation was the pitch detection. On first glance, it can seem as easy as putting data into a FFT, Fast-Fourier Transform. A FFT, is an algorithm that can compute compromising frequencies of a given signal. \cite{FFT}
+
+
+%% story board
+%% wireframe
+%% asking guitarist what they wanted 
+
+
+%% guitarist wants to pick up his phone tune and play, not waste time with 
 
 %%You are expected to do some software modelling of your application choice.
  
 \section{Implementation}
 %%Short description of your application implementation including screenshots.
+
+\subsection{Navigation}
+
+\subsection{Recording}
+
+\subsection{Playback}
+
+\subsection{Tuning}
+
 
 \section{Evaluation}
 %%4. An evaluation of your implementation. Points to consider discussing in this section are:
@@ -135,6 +164,10 @@ This project aims to implement a mobile application prototype using the Android 
 %%• Comparison against other applications/games in the genre, particularly the ones that inspired your choice
 %%• An evaluation of your app against user feedback or as compared with other apps/ games
 %%• Possible improvements to your application
+
+
+%% original concept was different etc
+
 \section{Summary}
 
 %%Summary of any resources used plus a list of references. You must provide a
@@ -146,5 +179,21 @@ This project aims to implement a mobile application prototype using the Android 
 \bibliographystyle{acmsiggraph}
 \bibliography{report}
 
+
+\section{Appendix}
+
+Below are screenshots of mobile applications.
+
+\figuremacroW
+{daTune}
+{Screenshot of a simple chromatic tuner - DaTuner. Note how clear the complex information is displayed through a simple two-colour display.}
+{\protect\cite{DaTune}}
+{1.0}
+
+\figuremacroW
+{martinTuner}
+{Screenshot of the Martin Guitar Tuner. Note the inclusion of a reference note tuner.}
+{\protect\cite{Martin}}
+{1.0}
 
 \end{document}

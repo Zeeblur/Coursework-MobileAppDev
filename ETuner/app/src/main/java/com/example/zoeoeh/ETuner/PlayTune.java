@@ -237,6 +237,8 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         //controller.show(0);
     }
 
+    //TODO playing tune on first switch from PLay tab
+
     private void setController() {
         if (controller == null)
         {

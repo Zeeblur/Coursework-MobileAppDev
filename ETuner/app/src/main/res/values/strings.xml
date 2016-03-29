@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">InputAudio</string>
+    <string name="app_name">ETuner</string>
     <string name="recString">Record!</string>
     <string name="loopBtn">Loop</string>
     <string name="playBtn">Play</string>
