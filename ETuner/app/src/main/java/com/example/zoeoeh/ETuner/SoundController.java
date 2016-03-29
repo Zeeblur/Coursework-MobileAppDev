@@ -17,8 +17,7 @@ public class SoundController extends MediaController {
 
     public void inVisible()
     {
+        // hides controller when needed
         super.hide();
-        //TODO get back function key dispatch event here
-
     }
 }

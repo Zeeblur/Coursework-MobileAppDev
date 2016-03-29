@@ -41,7 +41,6 @@ public class Recorder extends Fragment {
 
     public final static String albumName = "ETunerRecordings";
     private String defaultDescription = "My Recording";
-    //TODO last file null pointer
 
     private void prepareRec()
     {
@@ -270,7 +269,6 @@ public class Recorder extends Fragment {
 
     public boolean validateInputFileName(String input)
     {
-        // TODO check for blank strings!!
 
         // check if existing file
         File file = new File(recDir + input + fileExt);

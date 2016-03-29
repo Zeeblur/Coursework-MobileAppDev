@@ -8,8 +8,6 @@
     android:orientation="vertical"
     tools:context="com.example.zoeoeh.ETuner.PlayTune">
 
-
-
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

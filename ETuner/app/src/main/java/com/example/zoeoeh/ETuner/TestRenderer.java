@@ -43,9 +43,13 @@ public class TestRenderer implements GLSurfaceView.Renderer {
     private final FloatBuffer cubeColoursHead;
     private final FloatBuffer cubeNormals;
     private final FloatBuffer cubeColoursStrings;
+    private final FloatBuffer cubeColoursNeck;
 
-    private static FloatBuffer cylinderNormals;
-    private static FloatBuffer cylinderPositions;
+    private static FloatBuffer pegNormals;
+    private static FloatBuffer pegPositions;
+
+    private static FloatBuffer stringNormals;
+    private static FloatBuffer stringPositions;
     private static FloatBuffer cylinderColours;
 
 
@@ -81,6 +85,9 @@ public class TestRenderer implements GLSurfaceView.Renderer {
     // hold initial x translations for each string
     private final float[] xTranslationsStrings = {-1.5f,-0.9f,-0.3f, 0.3f, 0.9f, 1.5f};
     private static boolean[] chosenStringBool = {false, false, false, false, false, false};
+    float[] scaleXStrings = {1.0f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f};
+    float[] scaleYStrings = {1.0f, 1.45f, 2.0f, 2.0f, 1.45f, 1.0f};
+    float[] yTranslationsStrings = {-3.0f, -1.85f ,-1.5f ,-1.5f ,-1.85f ,-3.0f};
 
     // hold normal data
     private ArrayList<Float> normals = new ArrayList<>();
@@ -169,57 +176,15 @@ public class TestRenderer implements GLSurfaceView.Renderer {
                         -1.0f, -1.0f, -1.0f,
                 };
 
-        // R, G, B, A
-        final float[] cubeColourData =
-                {
-                        // Front face (red)
-                        1.0f, 0.0f, 0.0f, 1.0f,
-                        1.0f, 0.0f, 0.0f, 1.0f,
-                        1.0f, 0.0f, 0.0f, 1.0f,
-                        1.0f, 0.0f, 0.0f, 1.0f,
-                        1.0f, 0.0f, 0.0f, 1.0f,
-                        1.0f, 0.0f, 0.0f, 1.0f,
+        float[] neckColourData = new float[36];
 
-                        // Right face (green)
-                        0.0f, 1.0f, 0.0f, 1.0f,
-                        0.0f, 1.0f, 0.0f, 1.0f,
-                        0.0f, 1.0f, 0.0f, 1.0f,
-                        0.0f, 1.0f, 0.0f, 1.0f,
-                        0.0f, 1.0f, 0.0f, 1.0f,
-                        0.0f, 1.0f, 0.0f, 1.0f,
+        for (int i = 0; i < neckColourData.length - 4; i += 4) {
+            neckColourData[i] = 0.58f;
+            neckColourData[i + 1] = 0.243f;
+            neckColourData[i + 2] = 0.14f;
+            neckColourData[i + 3] = 1.0f;
 
-                        // Back face (blue)
-                        0.0f, 0.0f, 1.0f, 1.0f,
-                        0.0f, 0.0f, 1.0f, 1.0f,
-                        0.0f, 0.0f, 1.0f, 1.0f,
-                        0.0f, 0.0f, 1.0f, 1.0f,
-                        0.0f, 0.0f, 1.0f, 1.0f,
-                        0.0f, 0.0f, 1.0f, 1.0f,
-
-                        // Left face (yellow)
-                        1.0f, 1.0f, 0.0f, 1.0f,
-                        1.0f, 1.0f, 0.0f, 1.0f,
-                        1.0f, 1.0f, 0.0f, 1.0f,
-                        1.0f, 1.0f, 0.0f, 1.0f,
-                        1.0f, 1.0f, 0.0f, 1.0f,
-                        1.0f, 1.0f, 0.0f, 1.0f,
-
-                        // Top face (cyan)
-                        0.0f, 1.0f, 1.0f, 1.0f,
-                        0.0f, 1.0f, 1.0f, 1.0f,
-                        0.0f, 1.0f, 1.0f, 1.0f,
-                        0.0f, 1.0f, 1.0f, 1.0f,
-                        0.0f, 1.0f, 1.0f, 1.0f,
-                        0.0f, 1.0f, 1.0f, 1.0f,
-
-                        // Bottom face (magenta)
-                        1.0f, 0.0f, 1.0f, 1.0f,
-                        1.0f, 0.0f, 1.0f, 1.0f,
-                        1.0f, 0.0f, 1.0f, 1.0f,
-                        1.0f, 0.0f, 1.0f, 1.0f,
-                        1.0f, 0.0f, 1.0f, 1.0f,
-                        1.0f, 0.0f, 1.0f, 1.0f
-                };
+        }
 
         float[] stringColourData = new float[144];
 
@@ -228,6 +193,16 @@ public class TestRenderer implements GLSurfaceView.Renderer {
             stringColourData[i + 1] = 0.9f;
             stringColourData[i + 2] = 0.9f;
             stringColourData[i + 3] = 1.0f;
+
+        }
+
+        float[] headColourData = new float[144];
+
+        for (int i = 0; i < headColourData.length - 4; i += 4) {
+            headColourData[i] = 0.35f;
+            headColourData[i + 1] = 0.0f;
+            headColourData[i + 2] = 0.0f;
+            headColourData[i + 3] = 1.0f;
 
         }
 
@@ -291,9 +266,13 @@ public class TestRenderer implements GLSurfaceView.Renderer {
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
         cubePositions.put(cubePositionData).position(0);
 
-        cubeColoursHead = ByteBuffer.allocateDirect(cubeColourData.length * mBytesPerFloat)
+        cubeColoursNeck = ByteBuffer.allocateDirect(neckColourData.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        cubeColoursHead.put(cubeColourData).position(0);
+        cubeColoursNeck.put(neckColourData).position(0);
+
+        cubeColoursHead = ByteBuffer.allocateDirect(headColourData.length * mBytesPerFloat)
+                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        cubeColoursHead.put(headColourData).position(0);
 
         cubeColoursStrings = ByteBuffer.allocateDirect(stringColourData.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -303,7 +282,9 @@ public class TestRenderer implements GLSurfaceView.Renderer {
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
         cubeNormals.put(cubeNormalData).position(0);
 
-        createCylinderGeometry(new Float3(0.25f, 5.0f, 0.25f));
+        // bool is peg? false
+        createCylinderGeometry(false, new Float3(0.25f, 5.0f, 0.25f)); // create string
+        createCylinderGeometry(true, new Float3(0.5f, 0.75f, 1.0f));  // create peg
 
         // how many vertices length / size of data
         numberOfVerticesCube = cubePositionData.length;
@@ -477,19 +458,65 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         // guitar neck
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, -3.0f, -7.0f);
-        //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.scaleM(mModelMatrix, 0, 1.75f, 2.5f, 1.0f);
-        drawGeometry(cubePositions, cubeColoursHead, cubeNormals, numberOfVerticesCube);
+        drawGeometry(cubePositions, cubeColoursNeck, cubeNormals, numberOfVerticesCube);
 
         //GLES20.glUseProgram(dispProgramHandle);
 
-        drawString(0, chosenStringBool[0]);
-        drawString(1, chosenStringBool[1]);
-        drawString(2, chosenStringBool[2]);
-        drawString(3, chosenStringBool[3]);
-        drawString(4, chosenStringBool[4]);
-        drawString(5, chosenStringBool[5]);
+        // pass in string index, iterate through number of strings calling draw on each
+        for (int i = 0; i < chosenStringBool.length; ++i)
+        {
+            drawString(i);
+        }
 
+        // draw posts, pass in translation information
+        drawPosts(0.4f, 3.5f);   // d
+        drawPosts(-0.4f, 3.5f);  // a
+        drawPosts(-0.9f, 1.60f); // g
+        drawPosts(0.9f, 1.60f);  // b
+        drawPosts(-1.5f, -0.5f); // low E
+        drawPosts(1.5f, -0.5f);  // high e
+
+        drawPegs(0, angleInDegrees, -0.5f);
+        drawPegs(1, angleInDegrees, 1.6f);
+        drawPegs(2, angleInDegrees, 3.5f);
+        drawPegs(3, angleInDegrees, 3.5f);
+        drawPegs(4, angleInDegrees, 1.6f);
+        drawPegs(5, angleInDegrees, -0.5f);
+    }
+
+    private void drawPosts(float transX, float transY)
+    {
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, transX, transY, -8.0f);
+        Matrix.scaleM(mModelMatrix, 0, 2.0f, 2.0f, 1.0f);
+
+        // rotate by 90 degrees to face screen
+        Matrix.rotateM(mModelMatrix, 0, 90.0f, 1.0f, 0.0f, 0.0f);
+        drawGeometry(stringPositions, cylinderColours, stringNormals, numberOfVerticesCylinder);
+    }
+
+    private void drawPegs(int stringIndex, float angleInDegrees, float transY)
+    {
+        float transX = 3.0f;
+        float tiltAngle = 30.0f;
+
+        if (stringIndex > 2)
+        {
+            transX = -transX;
+            tiltAngle = -tiltAngle;
+        }
+
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, -transX, transY, -6.0f);
+        Matrix.scaleM(mModelMatrix, 0, 0.5f, 1.0f, 1.0f);
+        Matrix.rotateM(mModelMatrix, 0, 90, 0.0f, 0.0f, 1.0f);
+        Matrix.rotateM(mModelMatrix, 0, tiltAngle, 1.0f, 0.0f, 0.0f); // tilt
+        if (chosenStringBool[stringIndex])
+        {
+            Matrix.rotateM(mModelMatrix, 0, angleInDegrees*10.0f, 0.0f, 1.0f, 0.0f);
+        }
+        drawGeometry(pegPositions, cylinderColours, pegNormals, numberOfVerticesCylinder);
     }
 
     // return length squared of vector
@@ -503,14 +530,14 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         return result;
     }
 
-    private void drawString(int stringIndex, boolean isChosen)
+    private void drawString(int stringIndex)
     {
-        float[] initialTranslation = { xTranslationsStrings[stringIndex], -1.5f, -6.0f };
+        float[] initialTranslation = { xTranslationsStrings[stringIndex], yTranslationsStrings[stringIndex], -6.0f };
         float[] translateBy = { 0.0f, 0.0f, 0.0f };
         float[] translationAdjustment = { adjustmentX[stringIndex], 0.0f, 0.0f};
         float[] totalTranslation = { totalTranslationx[stringIndex], 0.0f, 0.0f};
 
-        if (!isChosen)
+        if (!chosenStringBool[stringIndex])
         {
             // don't move
             translationAdjustment[0] = 0.0f;
@@ -537,8 +564,8 @@ public class TestRenderer implements GLSurfaceView.Renderer {
 
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, translateBy[0], translateBy[1], translateBy[2]);
-        Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
-        drawGeometry(cylinderPositions, cylinderColours, cylinderNormals, numberOfVerticesCylinder);
+        Matrix.scaleM(mModelMatrix, 0, scaleXStrings[stringIndex], scaleYStrings[stringIndex], 1.0f);
+        drawGeometry(stringPositions, cylinderColours, stringNormals, numberOfVerticesCylinder);
 
     }
 
@@ -585,28 +612,6 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         // Draw the cube.
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, numberOfVertices);
-    }
-
-    /**
-     * Draws a point representing the position of the light.
-     */
-    private void drawLight() {
-        final int pointMVPMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix");
-        final int pointPositionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
-
-        // Pass in the position.
-        GLES20.glVertexAttrib3f(pointPositionHandle, mLightPosInModelSpace[0], mLightPosInModelSpace[1], mLightPosInModelSpace[2]);
-
-        // Since we are not using a buffer object, disable vertex arrays for this attribute.
-        GLES20.glDisableVertexAttribArray(pointPositionHandle);
-
-        // Pass in the transformation matrix.
-        Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mLightModelMatrix, 0);
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
-        GLES20.glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-
-        // Draw the point.
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1);
     }
 
     /**
@@ -693,14 +698,12 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         return programHandle;
     }
 
-    public void createCylinderGeometry(Float3 dims) {
+    public void createCylinderGeometry(Boolean isPeg, Float3 dims) {
         //geometry geometry_builder::create_cylinder(const unsigned int stacks,const unsigned
         //int slices,const glm::vec3 & dims)
 
-        // Declare required buffers - positions, normals, texture coordinates and colour
+        // Declare required buffers - positions, normals and colour
         ArrayList<Float> positions = new ArrayList<>();
-
-        ArrayList<Float2> tex_coords = new ArrayList<>();
         ArrayList<Float> colours = new ArrayList<>();
 
         // vars for calculations default dimensions
@@ -714,7 +717,6 @@ public class TestRenderer implements GLSurfaceView.Renderer {
 
         // current vertex
         Float3 curr_vert;
-        Float2 tex_coord = new Float2(0.5f, 0.5f);
 
         // Angle per slice
         float delta_angle = (2.0f * (float)Math.PI)/(float)slices;
@@ -742,10 +744,6 @@ public class TestRenderer implements GLSurfaceView.Renderer {
                 colours.addAll(Arrays.asList(0.7f, 0.7f, 0.7f, 1.0f));
             }
 
-            // Push back tex coordinates
-            tex_coords.add(tex_coord);
-            tex_coords.add(new Float2(tex_coord.x + prev_vert.x, tex_coord.y - prev_vert.z));
-            tex_coords.add(new Float2(tex_coord.x + curr_vert.x, tex_coord.y - curr_vert.z));
             // Set previous as current
             prev_vert = curr_vert;
         }
@@ -778,10 +776,6 @@ public class TestRenderer implements GLSurfaceView.Renderer {
                 colours.addAll(Arrays.asList(0.7f, 0.7f, 0.7f, 1.0f));
             }
 
-            // Push back tex coordinates
-            tex_coords.add(tex_coord);
-            tex_coords.add(new Float2(tex_coord.x - prev_vert.x, tex_coord.y - prev_vert.z));
-            tex_coords.add(new Float2(tex_coord.x - curr_vert.x, tex_coord.y - curr_vert.z));
             // Set previous as current
             prev_vert = curr_vert;
         }
@@ -826,37 +820,24 @@ public class TestRenderer implements GLSurfaceView.Renderer {
                     v.z *= dims.z * 0.5f;
                 }
 
-                // Calculate texture coordinates
-                /*
-                coords.set(0, new Float2((-delta_width * j) / (float)Math.PI, dims.y - ((delta_height * i * dims.y) / 2.0f)));
-                coords.set(1, new Float2((-delta_width * (j + 1)) / (float)Math.PI, dims.y - ((delta_height * i * dims.y) / 2.0f)));
-                coords.set(2, new Float2((-delta_width * j) / (float) Math.PI, dims.y - ((delta_height * (i + 1) * dims.y) / 2.0f)));
-                coords.set(3, new Float2((-delta_width * (j + 1)) / (float) Math.PI, dims.y - ((delta_height * (i + 1) * dims.y) / 2.0f)));*/
-
                 // Triangle 1
                 positions.addAll(Arrays.asList(verts.get(0).x, verts.get(0).y, verts.get(0).z));
 
                 normaliseAddToList(new Float3(verts.get(0).x, 0.0f, verts.get(0).z));
 
 
-               // tex_coords.add(coords.get(0));
                 positions.addAll(Arrays.asList(verts.get(3).x, verts.get(3).y, verts.get(3).z));
                 normaliseAddToList(new Float3(verts.get(3).x, 0.0f, verts.get(3).z));
-              //  tex_coords.add(coords.get(3));
                 positions.addAll(Arrays.asList(verts.get(2).x, verts.get(2).y, verts.get(2).z));
                 normaliseAddToList(new Float3(verts.get(2).x, 0.0f, verts.get(2).z));
-              //  tex_coords.add(coords.get(2));
 
                 // Triangle 2
                 positions.addAll(Arrays.asList(verts.get(0).x, verts.get(0).y, verts.get(0).z));
                 normaliseAddToList(new Float3(verts.get(0).x, 0.0f, verts.get(0).z));
-             //   tex_coords.add(coords.get(0));
                 positions.addAll(Arrays.asList(verts.get(1).x, verts.get(1).y, verts.get(1).z));
                 normaliseAddToList(new Float3(verts.get(1).x, 0.0f, verts.get(1).z));
-              //  tex_coords.add(coords.get(1));
                 positions.addAll(Arrays.asList(verts.get(3).x, verts.get(3).y, verts.get(3).z));
                 normaliseAddToList(new Float3(verts.get(3).x, 0.0f, verts.get(3).z));
-             //   tex_coords.add(coords.get(3));
 
                 // Colours
                 for (int k = 0; k< 6; ++k)
@@ -873,14 +854,19 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         for (Float f : normals) {
             arrayNormals[i++] = (f != null ? f : Float.NaN);
         }
-       // Float[] arrayNormals = normals.toArray(new Float[normals.size()]);
 
-        cylinderNormals = ByteBuffer.allocateDirect(normals.size() * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        cylinderNormals.put(arrayNormals).position(0);
+        if (isPeg)
+        {
+            pegNormals = addToBuffer(pegNormals, normals);
+            pegPositions = addToBuffer(pegPositions, positions);
+        }
+        else
+        {
+            stringNormals = addToBuffer(stringNormals, normals);
+            stringPositions = addToBuffer(stringPositions, positions);
+        }
 
         cylinderColours = addToBuffer(cylinderColours, colours);
-        cylinderPositions = addToBuffer(cylinderPositions, positions);
 
         // how many vertices length / size of data
         numberOfVerticesCylinder = positions.size();

@@ -69,8 +69,6 @@ public class MyGLSurface extends GLSurfaceView {
         return super.onTouchEvent(event);
     }
 
-// TODO getting a service leak when using back button as not releasing mp properly.
-
     // TODO write why I wont do raycasting....
 
 }

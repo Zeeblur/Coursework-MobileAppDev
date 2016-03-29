@@ -166,8 +166,6 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         paused=true;
     }
 
-    //TODO need to stop binding leak when frag is paused.
-
     @Override
     public void onStop()
     {
@@ -186,9 +184,11 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
             // If we are becoming invisible, then...
             if (!isVisibleToUser) {
                 Log.d("MyFragment", "Not visible anymore.  Stopping audio.");
-                // TODO stop audio playback
                 paused=true;
                 playbackPaused= true;
+
+                // pause sounds when off screen
+                myService.pausePlayer();
 
                 // when tab is invisible use super.hide to hide the controller.
                 controller.inVisible();

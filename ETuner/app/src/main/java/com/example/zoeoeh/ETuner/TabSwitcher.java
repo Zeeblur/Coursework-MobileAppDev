@@ -132,6 +132,13 @@ public class TabSwitcher extends AppCompatActivity {
         Toast.makeText(getmContext(), "mmhmmm clipPicked", Toast.LENGTH_SHORT).show();
     }
 
+    // exit with app closing player
+    @Override
+    public void onBackPressed() {
+        PlayTune myTune = (PlayTune)adapter.getItem(1);
+        myTune.exitPlayer();
+    }
+
 
 
 }
