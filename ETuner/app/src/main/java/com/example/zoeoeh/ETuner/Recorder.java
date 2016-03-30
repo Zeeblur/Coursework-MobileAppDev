@@ -301,5 +301,4 @@ public class Recorder extends Fragment {
 
     }
 
-    //TODO sort out menu bar
 }

@@ -40,6 +40,7 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
     private static Intent playIntent;
     private static boolean musicBound = false;
     private boolean paused=false, playbackPaused=false;
+    private static boolean pageInvisible = false;
 
     private static View myView;
 
@@ -174,7 +175,6 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
     }
 
 
-    //TODO have a look at this reeee
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -184,6 +184,7 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
             // If we are becoming invisible, then...
             if (!isVisibleToUser) {
                 Log.d("MyFragment", "Not visible anymore.  Stopping audio.");
+                pageInvisible = true;
                 paused=true;
                 playbackPaused= true;
 
@@ -195,6 +196,7 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
             }
             else
             {
+                pageInvisible = false;
                 paused = false;
                 setController();
 
@@ -237,8 +239,6 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         //controller.show(0);
     }
 
-    //TODO playing tune on first switch from PLay tab
-
     private void setController() {
         if (controller == null)
         {
@@ -261,6 +261,11 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         controller.setAnchorView(myView.findViewById(R.id.spaceForController));
         controller.setEnabled(true);
 
+    }
+
+    public static boolean getVisible()
+    {
+        return pageInvisible;
     }
 
     public void playNext()

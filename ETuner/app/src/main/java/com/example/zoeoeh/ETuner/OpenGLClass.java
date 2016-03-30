@@ -106,7 +106,6 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
         myAccel = mySensorMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mySensorMan.registerListener(this, myAccel, SensorManager.SENSOR_DELAY_NORMAL);
 
-        //TODO tap for next string?
         // return this view
         return myView;
     }

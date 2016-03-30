@@ -68,7 +68,6 @@ public class TabSwitcher extends AppCompatActivity {
             @Override
             public void onTabUnselected(TabLayout.Tab tab)
             {
-                // TODO destroy grpahic tab
                 /*
                 if (tab.getPosition() == 2) {
                     Toast.makeText(getBaseContext(), tab.getPosition() + " is this 2", Toast.LENGTH_LONG).show();

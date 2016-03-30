@@ -20,15 +20,17 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
+        android:layout_gravity="right|bottom"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@color/highlightBlue">
 
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/playBtn"
+            android:textColor="@color/white"
+            android:textStyle="bold"
             android:id="@+id/playSwitch"
             android:layout_marginLeft="5dp"
             android:switchPadding="10dp"
@@ -38,6 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/loopBtn"
+            android:textColor="@color/white"
+            android:textStyle="italic"
             android:id="@+id/loopSwitch"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"

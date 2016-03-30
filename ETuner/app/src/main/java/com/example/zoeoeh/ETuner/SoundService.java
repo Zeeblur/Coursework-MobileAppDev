@@ -82,7 +82,7 @@ public class SoundService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(myPlayer.getCurrentPosition() > 0){
+        if(myPlayer.getCurrentPosition() > 0 && !PlayTune.getVisible()){
             mp.reset();
             playNext();
         }
