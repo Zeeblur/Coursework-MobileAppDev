@@ -1,0 +1,49 @@
+\begin{thebibliography}{\protect\citename{{C.F Martin \& Co} }2015}
+
+\bibitem[\protect\citename{{Applaud Apps} }2016]{DaTune}
+{\sc {Applaud Apps}}.
+\newblock 2016.
+\newblock Tuner - datuner (lite!).
+\newblock
+  \href{https://play.google.com/store/apps/details?id=com.bork.dsp.datuna}{www.play.google.com/store/apps}.
+
+\bibitem[\protect\citename{{C.F Martin \& Co} }2015]{Martin}
+{\sc {C.F Martin \& Co}}.
+\newblock 2015.
+\newblock Martin guitar tuner.
+\newblock
+  \href{https://play.google.com/store/apps/details?id=com.martin.tuner}{www.play.google.com/store/apps}.
+
+\bibitem[\protect\citename{Constine }2014]{hamburger}
+{\sc Constine, J.}
+\newblock 2014.
+\newblock Kill the hamburger button.
+\newblock {\em Accessed: March 2016\/}.
+\newblock
+  \href{http://techcrunch.com/2014/05/24/before-the-hamburger-button-kills-you/}{www.techcrunch.com}.
+
+\bibitem[\protect\citename{Hindy }2015]{bestApps}
+{\sc Hindy, J.}
+\newblock 2015.
+\newblock 10 best guitar tuner apps for android.
+\newblock {\em Accessed: March 2016\/}.
+\newblock
+  \href{http://www.androidauthority.com/best-guitar-tuner-apps-for-android-615004/}{www.androidauthority.com}.
+
+\bibitem[\protect\citename{Roche }2012]{FFT}
+{\sc Roche, B.}
+\newblock 2012.
+\newblock Frequency detection using the fft (aka pitch tracking) with source
+  code.
+\newblock {\em Accessed: Feb 2016\/}.
+\newblock
+  \href{http://blog.bjornroche.com/2012/07/frequency-detection-using-fft-aka-pitch.html}{www.blog.bjornroche.com}.
+
+\bibitem[\protect\citename{{Roland} }]{Roland}
+{\sc {Roland}}.
+\newblock Roland tu-2, chromatic tuner.
+\newblock {\em Accessed: March 2016\/}.
+\newblock
+  \href{http://roland.com/support/article/?q=faq&p=TU-2&id=1832635}{www.roland.com}.
+
+\end{thebibliography}

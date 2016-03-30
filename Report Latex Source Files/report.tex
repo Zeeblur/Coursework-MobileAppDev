@@ -10,7 +10,7 @@
 \usepackage{float}
 \graphicspath{{./images/}}
 \newcommand{\figuremacroW}[4]{
-	\begin{figure}[h] %[htbp]
+	\begin{figure}[!ht] %[htbp]
 		\centering
 		\includegraphics[width=#4\columnwidth]{#1}
 		\caption[#2]{\textbf{#2} - #3}
@@ -19,14 +19,13 @@
 }
 
 \newcommand{\figuremacroF}[4]{
-	\begin{figure*}[h] % [htbp]
+	\begin{figure*}[!ht] % [htbp]
 		\centering
 		\includegraphics[width=#4\textwidth]{#1}
 		\caption[#2]{\textbf{#2} - #3}
 		\label{fig:#1}
 	\end{figure*}
 }
-
 
 \usepackage{lipsum}
 
@@ -128,18 +127,47 @@ The initial aims of this project were to develop a mobile application for the an
 
 \paragraph{Martin Guitar Tuner} Another application that is inspirational is the C.F. Martin \& Co. Guitar Tuner App (see Figure 3). Overall it is not a very good application, it's uses a "hamburger" style navigation menu and it's tuner pages are low-quality images with very little user interaction. Hamburger menus, even though widely used, are not a good way of displaying menu items. They are useful in the sense that complex navigation can be hidden behind a button which saves screen space, but they are 'less efficient' due to the need of tapping the button before you can reach any options. They also make the ability to glance at an available interaction more difficult, which can lead to users forgetting that some features exist. \cite{hamburger} One good thing about the application is that it includes a very basic approach to an ear tuner. It is simple, you tap the tuning peg and the corresponding note plays, and that's it. Which is why it is inspiring to the project.
 
+
 \section{Software Design}
 
 \subsection{Design Decisions}
 
-A decision was made to favour a more simple app than some of the more feature-heavy application. This was due to the similarities of most applications already on the market, one of the project aims was to produce something different however still useful. The aim was to develop an application to be used as an everyday tool and not as a gimmick.
+A decision was made to favour a more simple app than some of the more feature-heavy application. This was due to the similarities of most applications already on the market, one of the project aims was to produce something different however still useful. The aim was to develop an application to be used as an everyday tool and not as a game or distraction.
 
-When researching implementation of chromatic tuning software, it seemed a little beyond the scope of the assignment. The biggest issue with the implementation was the pitch detection. On first glance, it can seem as easy as putting data into a FFT, Fast-Fourier Transform. A FFT, is an algorithm that can compute compromising frequencies of a given signal. \cite{FFT}
+When researching implementation of chromatic tuning software, it seemed a little beyond the scope of the assignment. The biggest issue with the implementation was the pitch detection. On first glance, it can seem as easy as putting data into a FFT, Fast-Fourier Transform. A FFT, is an algorithm that can compute compromising frequencies of a given signal. \cite{FFT} However, it also requires some pre-processing of the sampled data. For this project, it was inappropriate as the objectives of the tasks were to develop an application that used advanced features of the android API, so it was decided that implementing a pitch detection feature wouldn't have met these objectives. Instead, it was decided to include a reference note tuner implemented with 3D graphics.
 
+%%graphics
+
+As the focus of the project was using the android API, it was decided that the app should include a recording and playback feature. The implementation of a simple voice recorder. %% something to do with the app wanting to 
 
 %% story board
 %% wireframe
 %% asking guitarist what they wanted 
+
+\subsection{Experience Story}
+
+"A guitarist is walking in the park, an idea occurs to him of a melody. He opens the application, presses record and starts singing. He wants to remember this idea for when he arrives home. He stops the recording and can quickly decide if he wants to discard it or rename the file and save it. He types the name "In the Park" taps save, he swipes right and can playback his recording instantly by tapping on it's name within the view." 
+
+This is one particular experience story that 
+
+\subsection{Activity Diagrams}
+\figuremacroW
+{RecordTab}
+{The activity diagram for the Record Tab}
+{}
+{1.0}
+
+\figuremacroW
+{PlayTab}
+{The activity diagram for the Play Tab}
+{}
+{1.0}
+
+\figuremacroW
+{TuneTab}
+{The activity diagram for the Tune Tab}
+{}
+{1.0}
 
 
 %% guitarist wants to pick up his phone tune and play, not waste time with 
@@ -151,11 +179,22 @@ When researching implementation of chromatic tuning software, it seemed a little
 
 \subsection{Navigation}
 
-\subsection{Recording}
+For the main navigation of the app, one main activity was used alongside fragments. In doing so, a tab layout could be used making it easy for the user to see what options are available. To implement this, a ViewPager and custom PagerAdapter was used. A ViewPager does not pause fragments that are next to the visible tab to allow for smoother scrolling.
 
 \subsection{Playback}
 
+For the playback implementation, a class was created to store audio clip objects. Each contained an ID, a title and an artist. As of the issue with writing metadata to the audio file, the implementation uses android's own MediaStore to  %% clip adapter
+
+\subsection{Recording}
+
+The recording fragment of the app uses a MediaRecorder to save an audio recording in AAC format. Most built in voice recorder applications on mobile phones don't allow for customisation of the media file's metadata. From the experience story, an aim of the project was to implement a function to quickly change the file name, add a description and be able to playback showing these values. Without using an external library, editing metadata for recorded files was difficult. It could have been done using ID3Tags however the android library does not support encoding for MP3. To work around this, the project used AAC format. 
+To allow for 
+
+
+
 \subsection{Tuning}
+
+
 
 
 \section{Evaluation}
@@ -179,6 +218,8 @@ When researching implementation of chromatic tuning software, it seemed a little
 \bibliographystyle{acmsiggraph}
 \bibliography{report}
 
+\clearpage
+\newpage
 
 \section{Appendix}
 
@@ -195,5 +236,8 @@ Below are screenshots of mobile applications.
 {Screenshot of the Martin Guitar Tuner. Note the inclusion of a reference note tuner.}
 {\protect\cite{Martin}}
 {1.0}
+
+
+
 
 \end{document}
