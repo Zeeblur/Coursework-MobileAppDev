@@ -1,5 +1,12 @@
 \begin{thebibliography}{\protect\citename{{C.F Martin \& Co} }2015}
 
+\bibitem[\protect\citename{Android }]{SupportedMedia}
+{\sc Android}.
+\newblock Supported media formats.
+\newblock {\em Accessed: March 2016\/}.
+\newblock
+  \href{http://developer.android.com/guide/appendix/media-formats.html}{www.developer.android.com}.
+
 \bibitem[\protect\citename{{Applaud Apps} }2016]{DaTune}
 {\sc {Applaud Apps}}.
 \newblock 2016.
@@ -21,6 +28,14 @@
 \newblock {\em Accessed: March 2016\/}.
 \newblock
   \href{http://techcrunch.com/2014/05/24/before-the-hamburger-button-kills-you/}{www.techcrunch.com}.
+
+\bibitem[\protect\citename{Denardi }2013]{MediaStore}
+{\sc Denardi, S.}
+\newblock 2013.
+\newblock Querying and removing media from android mediastore.
+\newblock {\em Accessed: March 2016\/}.
+\newblock
+  \href{http://www.sandersdenardi.com/querying-and-removing-media-from-android-mediastore/}{www.sandersdenardi.com}.
 
 \bibitem[\protect\citename{Hindy }2015]{bestApps}
 {\sc Hindy, J.}

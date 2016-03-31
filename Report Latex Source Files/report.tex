@@ -10,7 +10,7 @@
 \usepackage{float}
 \graphicspath{{./images/}}
 \newcommand{\figuremacroW}[4]{
-	\begin{figure}[!ht] %[htbp]
+	\begin{figure}[H] %[htbp]
 		\centering
 		\includegraphics[width=#4\columnwidth]{#1}
 		\caption[#2]{\textbf{#2} - #3}
@@ -19,7 +19,7 @@
 }
 
 \newcommand{\figuremacroF}[4]{
-	\begin{figure*}[!ht] % [htbp]
+	\begin{figure*}[H] % [htbp]
 		\centering
 		\includegraphics[width=#4\textwidth]{#1}
 		\caption[#2]{\textbf{#2} - #3}
@@ -88,7 +88,7 @@ Mobile Applications Development (SET08114)}
 \teaser{
    \centering
    \includegraphics[width=1.0\textwidth]{images/teaser}
-   \caption{Project screenshots.}
+   \caption{Project screenshots. (a) Launch icon of Application, (b) Audio controller and clip selection, (c) 3D rendered guitar and (d) navigation tab bar.}
    \label{fig:teaser}
  }	
 
@@ -119,13 +119,19 @@ This project aims to implement a mobile application prototype using the Android 
 %%An introduction to your assignment stating its scope and content – this
 %%should include a brief overview of your application choice and the
 %%inspiration for your choice. Reference your reading. 
-The initial aims of this project were to develop a mobile application for the android platform. The initial ideas were that of a chromatic guitar tuner app. On the market at the moment there are hundreds of guitar tuner applications however the successful ones all seem quite similar. Reading an article about the best guitar tuner apps, they all seem to have the same design feel towards them. \cite{bestApps} Most are chromatic, meaning it 'recognizes each of the twelve chromatic (semitone) steps of the equal-tempered scale (C, C\# D, D\#, E, F, F\#, G, G\# A, A\#, B)', \cite{Roland} which is useful as it can tune any instrument: and most of them are very complex, with many different features such as chord libraries and metronomes. Hardly any application within the top ten has a reference pitch section, and if they do, it's is almost always an extra feature. %%Therefore building an application that is slightly different. 
+The requirements of this project were to develop a mobile application for the android platform. The initial ideas were that of a chromatic guitar tuner app. On the market at the moment there are hundreds of guitar tuner applications however the successful ones all seem quite similar. Reading an article about the best guitar tuner applications, they all seem to have the same design feel towards them. \cite{bestApps} Most are chromatic, meaning it 'recognizes each of the twelve chromatic (semitone) steps of the equal-tempered scale (C, C\# D, D\#, E, F, F\#, G, G\# A, A\#, B)', \cite{Roland} which is useful as it can tune any instrument: and most of them are very complex, with many different features such as chord libraries and metronomes. Hardly any application within the top ten has a reference pitch section, and if they do, it's is almost always an extra feature. Making a decision to use a reference tuner as a main feature of the project would make the application unique compared to the hundreds of tuner applications already on the App Store.
+
+Another unique feature that was planned to implement would be that of a voice recorder and play back function.
+
+I NEED TO FINISH THIS
+
+ %%Therefore building an application that is slightly different. 
 
 \subsection{Related Work}
 
-\paragraph{DaTuner} One app that is very simple and particularly useful is the DaTuner. The free version of the application is very quick and simple to use, however if a user was looking for more, they will also find some advanced features within the pro version (see figure 2). DaTuner is a good application as it is very quick to use, it launches straight into a tuner which you can use automatically without any set-up or navigation.
+\paragraph{DaTuner} One app that is very simple and particularly useful is the DaTuner. The free version of the application is very quick and simple to use, however if a user was looking for more, they will also find some advanced features within the pro version (see figure \ref{fig:daTune}). DaTuner is a good application as it is very quick to use, it launches straight into a tuner which you can use automatically without any set-up or navigation.
 
-\paragraph{Martin Guitar Tuner} Another application that is inspirational is the C.F. Martin \& Co. Guitar Tuner App (see Figure 3). Overall it is not a very good application, it's uses a "hamburger" style navigation menu and it's tuner pages are low-quality images with very little user interaction. Hamburger menus, even though widely used, are not a good way of displaying menu items. They are useful in the sense that complex navigation can be hidden behind a button which saves screen space, but they are 'less efficient' due to the need of tapping the button before you can reach any options. They also make the ability to glance at an available interaction more difficult, which can lead to users forgetting that some features exist. \cite{hamburger} One good thing about the application is that it includes a very basic approach to an ear tuner. It is simple, you tap the tuning peg and the corresponding note plays, and that's it. Which is why it is inspiring to the project.
+\paragraph{Martin Guitar Tuner} Another application that is inspirational is the C.F. Martin \& Co. Guitar Tuner App (see Figure \ref{fig:martinTuner}). Overall it is not a very good application, it's uses a "hamburger" style navigation menu and it's tuner pages are low-quality images with very little user interaction. Hamburger menus, even though widely used, are not a good way of displaying menu items. They are useful in the sense that complex navigation can be hidden behind a button which saves screen space, but they are 'less efficient' due to the need of tapping the button before you can reach any options. They also make the ability to glance at an available interaction more difficult, which can lead to users forgetting that some features exist. \cite{hamburger} One good thing about the application is that it includes a very basic approach to an ear tuner. It is simple, you tap the tuning peg and the corresponding note plays, and that's it. Which is why it is inspiring to the project.
 
 
 \section{Software Design}
@@ -140,6 +146,8 @@ When researching implementation of chromatic tuning software, it seemed a little
 
 As the focus of the project was using the android API, it was decided that the app should include a recording and playback feature. The implementation of a simple voice recorder. %% something to do with the app wanting to 
 
+EXPLAIN WHY THIS SHOWS OFF THE API
+
 %% story board
 %% wireframe
 %% asking guitarist what they wanted 
@@ -148,9 +156,31 @@ As the focus of the project was using the android API, it was decided that the a
 
 "A guitarist is walking in the park, an idea occurs to him of a melody. He opens the application, presses record and starts singing. He wants to remember this idea for when he arrives home. He stops the recording and can quickly decide if he wants to discard it or rename the file and save it. He types the name "In the Park" taps save, he swipes right and can playback his recording instantly by tapping on it's name within the view." 
 
-This is one particular experience story that 
+This is one particular experience story that EXPLAIN THIS HERE
+SHOW WIREFRAMING
+
+\figuremacroW
+{playSketch}
+{A quick sketch of a user interface design for the play tab.}
+{}
+{1.0}
+
+\figuremacroW
+{recordSketch}
+{A quick sketch of a user interface design for the record tab.}
+{}
+{1.0}
+
+\figuremacroW
+{tuneSketch}
+{A quick sketch of a user interface design for the tune tab.}
+{}
+{1.0}
 
 \subsection{Activity Diagrams}
+
+EXPLAIN THESE DIAGRAMS
+
 \figuremacroW
 {RecordTab}
 {The activity diagram for the Record Tab}
@@ -183,14 +213,57 @@ For the main navigation of the app, one main activity was used alongside fragmen
 
 \subsection{Playback}
 
-For the playback implementation, a class was created to store audio clip objects. Each contained an ID, a title and an artist. As of the issue with writing metadata to the audio file, the implementation uses android's own MediaStore to  %% clip adapter
+For the playback implementation, a class was created to store audio clip objects. Each contained an ID, a title and an artist. As of the issue with writing metadata to the audio file, the implementation uses android's own MediaStore  %% clip adapter
 
 \subsection{Recording}
 
-The recording fragment of the app uses a MediaRecorder to save an audio recording in AAC format. Most built in voice recorder applications on mobile phones don't allow for customisation of the media file's metadata. From the experience story, an aim of the project was to implement a function to quickly change the file name, add a description and be able to playback showing these values. Without using an external library, editing metadata for recorded files was difficult. It could have been done using ID3Tags however the android library does not support encoding for MP3. To work around this, the project used AAC format. 
-To allow for 
+The recording fragment of the app uses a MediaRecorder to save an audio recording in AAC format. Most built in voice recorder applications on mobile phones don't allow for customisation of the media file's meta data. From the experience story, an aim of the project was to implement a function to quickly change the file name, add a description and be able to playback showing these values. Without using an external library, editing meta data for recorded files was difficult. It could have been done using ID3Tags however the android library does not support encoding for MP3. \cite{SupportedMedia} To work around this, android's MediaStore was used.
+
+The MediaStore is a content provider that contains meta data for all available media on both external and internal storage of the device, similar to an SQL database. When adding or removing media from a device, the meta data stored remains until Android scans the system for new media. Typically this happens when the device is booted, however it can be called explicitly by broadcasting an Intent. \cite{MediaStore} Therefore when an audio file was recorded and saved, a function was used to insert this into the database, see Listing \ref{lst:insertDB}.
+
+%%\begin{minipage}{\linewidth}
+
+\begin{lstlisting}[label = {lst:insertDB}, caption={Inserting File into MediaStore Database}]
+public void insertFileIntoDatabase(String fileName, String fileDesc)
+{
+    File mySound = new File(recDir, fileName + fileExt);
+    	
+    // rename file
+    boolean rename = tempFile.renameTo(mySound);
+    	
+   	// add recording to media database
+   	ContentValues values = new ContentValues(4);
+   	long current = System.currentTimeMillis();
+   	values.put(MediaStore.Audio.Media.TITLE, fileName);
+   	values.put(MediaStore.Audio.Media.ARTIST, fileDesc);
+   	values.put(MediaStore.Audio.Media.ALBUM, albumName);
+   	values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (current / 1000));
+    values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/AAC");
+   	values.put(MediaStore.Audio.Media.DATA, mySound.getAbsolutePath());
+    	
+   	ContentResolver contentResolver = TabSwitcher.getmContext().getContentResolver();
+    	
+   	Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+   	Uri newUri = contentResolver.insert(base, values);
+    	
+   	TabSwitcher.getmContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
+   	
+   	Toast.makeText(TabSwitcher.getmContext(), "Added File " + fileName, Toast.LENGTH_LONG).show();
+    	
+   	// sets dirty flag for updating list from database
+   	TabSwitcher.setListDirty(true);
+}
+\end{lstlisting}
+
+%%\end{minipage}
 
 
+
+To save resources, a recording is initially stored with a temporary file name so if the user decides not to keep the recording, they can easily just click delete and try again. Once a user clicks save, the file is renamed.
+
+To insert meta data into the database, see the method used on line 21 of Listing \ref{lst:insertDB}. This inserts a row into a table at the given URL, with the relevant ContentValues. For the description of the file, the Artist's column was used, as there was no option, without creating a separate database to customise the columns. In using the MediaStore as opposed to a 3rd party library to create meta data for the recordings, the recordings can also be accessed by any other app on the system.
+
+Finally, the intent was broadcast to the MediaScanner and a static flag was set, so that the play tab can update the list of files and show the new recording when navigated to. 
 
 \subsection{Tuning}
 
@@ -206,6 +279,8 @@ To allow for
 
 
 %% original concept was different etc
+
+The original concept of the app was very similar to the 
 
 \section{Summary}
 
