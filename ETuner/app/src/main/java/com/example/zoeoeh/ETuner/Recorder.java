@@ -235,17 +235,14 @@ public class Recorder extends Fragment {
     }
 
 
-    public void insertFileIntoDatabase(String fileName, String fileDesc)
+    private void insertFileIntoDatabase(String fileName, String fileDesc)
     {
         File mySound = new File(recDir, fileName + fileExt);
 
         // rename file
         boolean rename = tempFile.renameTo(mySound);
 
-
         // add recording to media database
-
-
         ContentValues values = new ContentValues(4);
         long current = System.currentTimeMillis();
         values.put(MediaStore.Audio.Media.TITLE, fileName);

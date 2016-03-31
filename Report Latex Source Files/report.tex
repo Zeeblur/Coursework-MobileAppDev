@@ -18,13 +18,13 @@
 	\end{figure}
 }
 
-\newcommand{\figuremacroF}[4]{
-	\begin{figure*}[H] % [htbp]
+\newcommand{\figuremacroF}[3]{
+	\begin{figure}[H] % [htbp]
 		\centering
-		\includegraphics[width=#4\textwidth]{#1}
-		\caption[#2]{\textbf{#2} - #3}
+		\includegraphics[width=#3\columnwidth]{#1}
+		\caption[#2]{\textbf{#2}}
 		\label{fig:#1}
-	\end{figure*}
+	\end{figure}
 }
 
 \usepackage{lipsum}
@@ -119,20 +119,29 @@ This project aims to implement a mobile application prototype using the Android 
 %%An introduction to your assignment stating its scope and content – this
 %%should include a brief overview of your application choice and the
 %%inspiration for your choice. Reference your reading. 
-The requirements of this project were to develop a mobile application for the android platform. The initial ideas were that of a chromatic guitar tuner app. On the market at the moment there are hundreds of guitar tuner applications however the successful ones all seem quite similar. Reading an article about the best guitar tuner applications, they all seem to have the same design feel towards them. \cite{bestApps} Most are chromatic, meaning it 'recognizes each of the twelve chromatic (semitone) steps of the equal-tempered scale (C, C\# D, D\#, E, F, F\#, G, G\# A, A\#, B)', \cite{Roland} which is useful as it can tune any instrument: and most of them are very complex, with many different features such as chord libraries and metronomes. Hardly any application within the top ten has a reference pitch section, and if they do, it's is almost always an extra feature. Making a decision to use a reference tuner as a main feature of the project would make the application unique compared to the hundreds of tuner applications already on the App Store.
+The requirements of this project were to develop a mobile application for the android platform. The initial ideas were that of a chromatic guitar tuner app. On the market at the moment there are hundreds of guitar tuner applications however the successful ones all seem quite similar. Reading an article about the best guitar tuner applications, they all seem to have the same design feel towards them. \cite{bestApps} Most are chromatic, meaning it 'recognizes each of the twelve chromatic (semitone) steps of the equal-tempered scale (C, C\#, D, D\#, E, F, F\#, G, G\# A, A\#, B)' which is useful as it can tune any instrument. \cite{Roland}
 
-Another unique feature that was planned to implement would be that of a voice recorder and play back function.
+Most of them are very complex, with many different features such as chord libraries and metronomes. Hardly any application within the top ten has a reference pitch section, and if they do, it's is almost always an extra feature. Making a decision to use a reference tuner as a main feature of the project would make the application unique compared to the hundreds of tuner applications already on the App Store.
 
-I NEED TO FINISH THIS
-
- %%Therefore building an application that is slightly different. 
+Another unique feature that was planned to implement would be that of a voice recorder and play back function. Taking inspiration from these successful applications, for this project it was decided to incorporate an extra feature, that would use more elements of the API to fit with the project's specifications. A voice recorder is a tool used by many singer-songwriters to quickly sing or strum down a tune or melody for later reference. However, none of the researched guitar applications included this as a feature. Most devices come with their own voice recorder applications built-in however from experience, the recordings are usually difficult to edit, find or delete. Which inspired the project to include a very simple user interface where the user can in one tap discard the recording immediately, or if they wish give it a more meaningful name than "Voice0001" for example.  
 
 \subsection{Related Work}
 
 \paragraph{DaTuner} One app that is very simple and particularly useful is the DaTuner. The free version of the application is very quick and simple to use, however if a user was looking for more, they will also find some advanced features within the pro version (see figure \ref{fig:daTune}). DaTuner is a good application as it is very quick to use, it launches straight into a tuner which you can use automatically without any set-up or navigation.
 
-\paragraph{Martin Guitar Tuner} Another application that is inspirational is the C.F. Martin \& Co. Guitar Tuner App (see Figure \ref{fig:martinTuner}). Overall it is not a very good application, it's uses a "hamburger" style navigation menu and it's tuner pages are low-quality images with very little user interaction. Hamburger menus, even though widely used, are not a good way of displaying menu items. They are useful in the sense that complex navigation can be hidden behind a button which saves screen space, but they are 'less efficient' due to the need of tapping the button before you can reach any options. They also make the ability to glance at an available interaction more difficult, which can lead to users forgetting that some features exist. \cite{hamburger} One good thing about the application is that it includes a very basic approach to an ear tuner. It is simple, you tap the tuning peg and the corresponding note plays, and that's it. Which is why it is inspiring to the project.
+\figuremacroW
+{daTune}
+{Screenshot of a simple chromatic tuner - DaTuner. Note how clear the complex information is displayed through a simple two-colour display.}
+{\protect\cite{DaTune}}
+{1.0}
 
+\paragraph{Martin Guitar Tuner} Another application that is inspirational is the C.F. Martin \& Co. Guitar Tuner App (see Figure \ref{fig:martinTuner}). Overall it is not a very good application, it's uses a "hamburger" style navigation menu and it's tuner pages are low-quality images with very little user interaction. Hamburger menus, even though widely used, are not a good way of displaying menu items. They are useful in the sense that complex navigation can be hidden behind a button which saves screen space, but they are 'less efficient' due to the need of tapping the button before you can reach any options. They also make the ability to glance at an available interaction more difficult, which can lead to users forgetting that some features exist. \cite{hamburger} One good thing about the application is that it includes a very basic approach to an ear tuner. It is simple, you tap the tuning peg and the corresponding note plays, which is why it is inspiring. For this project, the reference tuner will be implemented using a 3D rendered guitar with animation to show the user which string is being played.
+
+\figuremacroW
+{martinTuner}
+{Screenshot of the Martin Guitar Tuner. Note the inclusion of a reference note tuner.}
+{\protect\cite{Martin}}
+{1.0}
 
 \section{Software Design}
 
@@ -156,64 +165,58 @@ EXPLAIN WHY THIS SHOWS OFF THE API
 
 "A guitarist is walking in the park, an idea occurs to him of a melody. He opens the application, presses record and starts singing. He wants to remember this idea for when he arrives home. He stops the recording and can quickly decide if he wants to discard it or rename the file and save it. He types the name "In the Park" taps save, he swipes right and can playback his recording instantly by tapping on it's name within the view." 
 
-This is one particular experience story that EXPLAIN THIS HERE
-SHOW WIREFRAMING
+In creating an experience story for a particular scenario. %% Read notes on PID
 
-\figuremacroW
+\figuremacroF
 {playSketch}
 {A quick sketch of a user interface design for the play tab.}
-{}
 {1.0}
 
-\figuremacroW
+\figuremacroF
 {recordSketch}
 {A quick sketch of a user interface design for the record tab.}
-{}
 {1.0}
 
-\figuremacroW
+\figuremacroF
 {tuneSketch}
 {A quick sketch of a user interface design for the tune tab.}
-{}
 {1.0}
+
+SWIPE VIEWS!!
+http://developer.android.com/design/patterns/swipe-views.html
 
 \subsection{Activity Diagrams}
 
-EXPLAIN THESE DIAGRAMS
+After completing rough sketches of the user interface design. The application was split into three tabs. 
 
-\figuremacroW
+\figuremacroF
 {RecordTab}
 {The activity diagram for the Record Tab}
-{}
 {1.0}
 
-\figuremacroW
+\figuremacroF
 {PlayTab}
 {The activity diagram for the Play Tab}
-{}
 {1.0}
 
-\figuremacroW
+\figuremacroF
 {TuneTab}
 {The activity diagram for the Tune Tab}
-{}
 {1.0}
-
-
-%% guitarist wants to pick up his phone tune and play, not waste time with 
-
-%%You are expected to do some software modelling of your application choice.
  
 \section{Implementation}
 %%Short description of your application implementation including screenshots.
 
 \subsection{Navigation}
 
-For the main navigation of the app, one main activity was used alongside fragments. In doing so, a tab layout could be used making it easy for the user to see what options are available. To implement this, a ViewPager and custom PagerAdapter was used. A ViewPager does not pause fragments that are next to the visible tab to allow for smoother scrolling.
+For the main navigation of the app, one main activity was used alongside fragments. In doing so, a tab layout could be used making it easy for the user to see what options are available. (See Figure \ref{fig:navBar}) To implement this, a ViewPager and custom PagerAdapter was used. A ViewPager does not pause fragments that are next to the visible tab to allow for smoother scrolling.
 
-\subsection{Playback}
+\figuremacroF
+{navBar}
+{An image of the final implementation of the navigation bar. It consists of the title of the application and three tabs which are clickable or swipeable.}
+{1.0}
 
-For the playback implementation, a class was created to store audio clip objects. Each contained an ID, a title and an artist. As of the issue with writing metadata to the audio file, the implementation uses android's own MediaStore  %% clip adapter
+For the implementation, the PagerAdapter created extended the FragmentStatePagerAdapter class of the API. It was chosen due to the fact it "It destroys fragments as the user navigates to other pages, minimizing memory usage." \cite{Swipe} This meant that if the record tab was visible, the tune tab would call it's onPause lifecycle method, stopping the continuous call for the renderer's update function.
 
 \subsection{Recording}
 
@@ -255,19 +258,51 @@ public void insertFileIntoDatabase(String fileName, String fileDesc)
 }
 \end{lstlisting}
 
-%%\end{minipage}
-
-
-
 To save resources, a recording is initially stored with a temporary file name so if the user decides not to keep the recording, they can easily just click delete and try again. Once a user clicks save, the file is renamed.
 
 To insert meta data into the database, see the method used on line 21 of Listing \ref{lst:insertDB}. This inserts a row into a table at the given URL, with the relevant ContentValues. For the description of the file, the Artist's column was used, as there was no option, without creating a separate database to customise the columns. In using the MediaStore as opposed to a 3rd party library to create meta data for the recordings, the recordings can also be accessed by any other app on the system.
 
-Finally, the intent was broadcast to the MediaScanner and a static flag was set, so that the play tab can update the list of files and show the new recording when navigated to. 
+Finally, the intent was broadcast to the MediaScanner and a static flag was set, so that the play tab can update the list of files and show the new recording when navigated to.
+
+In keeping with the proposed graphic design, the layout of the tab was filled with a vector graphic of a microphone with a free to use license. \cite{microphone} It also included an image button with a record icon created for the project.
+
+\figuremacroF
+{PlayTabSS}
+{A screenshot of the final implementation of the record tab. The button at the bottom switches from a record icon to a stop icon when pressed to indicate the app is recording.}
+{1.0}
+
+Once the recording is stopped, a custom alert dialog was used to allow the user to delete the file, or save their own details. To stop the dialog closing if an invalid file name was entered, the click event handlers were created and then overridden, see Figure \ref{fig:dialog}
+
+\figuremacroF
+{dialog}
+{A screenshot of the alert dialog that is used when a user stops a recording. Note the toast that appears if the filename is already in use.}
+{1.0}
+
+\subsection{Playback}
+
+For the playback implementation, a class was created to store audio clip objects. Each contained an ID, a title and an artist. This meant that when the fragment is created, the device is queried for all audio content stored. Due to the fact, the album was set as constant for every recorded file meant that only files with the exact album name are initialised as Audio Clip objects, see Listing \ref{lst:query}.
+
+\begin{lstlisting}[label = {lst:query}, caption={Conditional Statement for Creating Audio Clips}]
+if (soundCursor.getString(albumColumn).equals(Recorder.albumName))
+{
+	clipList.add(new AudioClip(thisId, thisTitle, thisArtist));
+}
+\end{lstlisting}
+
+By using an ArrayList container to store these AudioClip objects, the List View within the Fragment's layout can be populated by using a custom Adapter class. This means that for every object in the list, the adapter can easily iterate through the list retrieving each of the instance variables and setting the appropriate text views to display the information. Rather than having to query the database each time, when the play tab becomes visible, it checks whether the flag set in the record tab is true, if so, it will clear the list and re-populate it. 
+
+\figuremacroF
+{playback}
+{An image of the final implementation of the Play tab. It uses Android's own MediaController to control the play functions, and highlights the current chosen track.}
+{1.0}
+
+For the playback of these audio clips, a sound Service was implemented meaning that if the user wanted, they could continue listening to their audio clips if they have navigated away from the application, or if they lock their device.
 
 \subsection{Tuning}
 
+For implementation of the tuning tab, a Frame Layout containing a SurfaceView was used. This SurfaceView was inflated using a custom OpenGL context which rendered to the screen. \cite{OpenGL}
 
+NEED TO TALK ABOUT ACCELEROMETER HERE
 
 
 \section{Evaluation}
@@ -282,6 +317,12 @@ Finally, the intent was broadcast to the MediaScanner and a static flag was set,
 
 The original concept of the app was very similar to the 
 
+
+\subsection{Further Work}
+
+In improving the application, the next steps are to build more functionality in the app by including a chromatic tuner. RAY CASTING. more realistic modelling of guitar REFINEMENT OF ACCELEROMETER FUNCTION.
+
+
 \section{Summary}
 
 %%Summary of any resources used plus a list of references. You must provide a
@@ -292,27 +333,6 @@ The original concept of the app was very similar to the
 
 \bibliographystyle{acmsiggraph}
 \bibliography{report}
-
-\clearpage
-\newpage
-
-\section{Appendix}
-
-Below are screenshots of mobile applications.
-
-\figuremacroW
-{daTune}
-{Screenshot of a simple chromatic tuner - DaTuner. Note how clear the complex information is displayed through a simple two-colour display.}
-{\protect\cite{DaTune}}
-{1.0}
-
-\figuremacroW
-{martinTuner}
-{Screenshot of the Martin Guitar Tuner. Note the inclusion of a reference note tuner.}
-{\protect\cite{Martin}}
-{1.0}
-
-
 
 
 \end{document}

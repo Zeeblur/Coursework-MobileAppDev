@@ -1,6 +1,13 @@
 \begin{thebibliography}{\protect\citename{{C.F Martin \& Co} }2015}
 
-\bibitem[\protect\citename{Android }]{SupportedMedia}
+\bibitem[\protect\citename{Android }a]{Swipe}
+{\sc Android}.
+\newblock Creating swipe views with tabs.
+\newblock {\em Accessed: March 2016\/}.
+\newblock
+  \href{http://developer.android.com/training/implementing-navigation/lateral.html#horizontal-paging}{www.developer.android.com}.
+
+\bibitem[\protect\citename{Android }b]{SupportedMedia}
 {\sc Android}.
 \newblock Supported media formats.
 \newblock {\em Accessed: March 2016\/}.
@@ -13,6 +20,14 @@
 \newblock Tuner - datuner (lite!).
 \newblock
   \href{https://play.google.com/store/apps/details?id=com.bork.dsp.datuna}{www.play.google.com/store/apps}.
+
+\bibitem[\protect\citename{Brothaler }2011]{OpenGL}
+{\sc Brothaler, K.}
+\newblock 2011.
+\newblock Android lesson one: Getting started.
+\newblock {\em Accessed: Feb 2016\/}.
+\newblock
+  \href{http://www.learnopengles.com/android-lesson-one-getting-started/}{www.learnopengles.com}.
 
 \bibitem[\protect\citename{{C.F Martin \& Co} }2015]{Martin}
 {\sc {C.F Martin \& Co}}.
@@ -60,5 +75,12 @@
 \newblock {\em Accessed: March 2016\/}.
 \newblock
   \href{http://roland.com/support/article/?q=faq&p=TU-2&id=1832635}{www.roland.com}.
+
+\bibitem[\protect\citename{{Vecto2000} }2011]{microphone}
+{\sc {Vecto2000}}.
+\newblock 2011.
+\newblock Free vector - vector microphone.
+\newblock
+  \href{http://vectorspedia.com/free-vector/vector-microphone-11863/}{www.vectorspedia.com}.
 
 \end{thebibliography}
