@@ -101,19 +101,6 @@ This project aims to implement a mobile application prototype using the Android 
 \keywordlist
 %\copyrightspace
 
-%% how to do some stuff
-%%\paragraph{Project Aims}
-
-%%\figuremacroW
-%%{imagename here}
-%%{caption  }
-%%{\protect\cite{citteee}}
-%%{1.0}
-
-%%\begin{lstlisting}[ caption={display code}]
- 	%% CODE HERE
-%%\end{lstlisting}
-
 \section{Introduction}
 
 %%An introduction to your assignment stating its scope and content – this
@@ -143,6 +130,10 @@ Another unique feature that was planned to implement would be that of a voice re
 {\protect\cite{Martin}}
 {1.0}
 
+\paragraph{Samsung Galaxy S6 Voice Recorder}
+
+Taking inspiration from the pre-installed Voice Recorder application from the Samsung Galaxy S6 device, an aim for the voice recorder tab is to have instant avalible playback functionality.
+
 \section{Software Design}
 
 \subsection{Design Decisions}
@@ -167,6 +158,8 @@ EXPLAIN WHY THIS SHOWS OFF THE API
 
 In creating an experience story for a particular scenario. %% Read notes on PID
 
+\subsection{User Interface Sketches}
+
 \figuremacroF
 {playSketch}
 {A quick sketch of a user interface design for the play tab.}
@@ -187,7 +180,9 @@ http://developer.android.com/design/patterns/swipe-views.html
 
 \subsection{Activity Diagrams}
 
-After completing rough sketches of the user interface design. The application was split into three tabs. 
+After completing rough sketches of the user interface design. The application was split into three tabs and activity diagrams were drawn to model the software. Figures \ref{fig:RecordTab}, \ref{fig:PlayTab} and \ref{TuneTab} show the high-level activity diagrams created for the Recording tab, the Play tab and the Tune tab respectively.
+
+These were key to the design of the implementation as they showed a structured flow of control for the program. Lower-level models could have been drawn with functional decomposition, however these diagrams were sufficient to begin implementation due to the main requirements and logic of the application being included.
 
 \figuremacroF
 {RecordTab}
@@ -205,7 +200,6 @@ After completing rough sketches of the user interface design. The application wa
 {1.0}
  
 \section{Implementation}
-%%Short description of your application implementation including screenshots.
 
 \subsection{Navigation}
 
@@ -260,7 +254,7 @@ public void insertFileIntoDatabase(String fileName, String fileDesc)
 
 To save resources, a recording is initially stored with a temporary file name so if the user decides not to keep the recording, they can easily just click delete and try again. Once a user clicks save, the file is renamed.
 
-To insert meta data into the database, see the method used on line 21 of Listing \ref{lst:insertDB}. This inserts a row into a table at the given URL, with the relevant ContentValues. For the description of the file, the Artist's column was used, as there was no option, without creating a separate database to customise the columns. In using the MediaStore as opposed to a 3rd party library to create meta data for the recordings, the recordings can also be accessed by any other app on the system.
+To insert meta data into the database, see the method used on line 21 of Listing \ref{lst:insertDB}. This inserts a row into a table at the given URL, with the relevant ContentValues. For the description of the file, the Artist's column was used, as there was no option, without creating a separate database to customise the columns. In using the MediaStore as opposed to a 3rd party library to create meta data for the recordings, it means that they can also be accessed by any other app on the system.
 
 Finally, the intent was broadcast to the MediaScanner and a static flag was set, so that the play tab can update the list of files and show the new recording when navigated to.
 
@@ -280,7 +274,7 @@ Once the recording is stopped, a custom alert dialog was used to allow the user 
 
 \subsection{Playback}
 
-For the playback implementation, a class was created to store audio clip objects. Each contained an ID, a title and an artist. This meant that when the fragment is created, the device is queried for all audio content stored. Due to the fact, the album was set as constant for every recorded file meant that only files with the exact album name are initialised as Audio Clip objects, see Listing \ref{lst:query}.
+For the playback implementation, a class was created to store audio clip objects. Each contained an ID, a title and an artist. This meant that when the fragment is created, the device is queried for all audio content stored. Due to the fact, the album was set as constant for every recorded file meant that only files with the exact album name were initialised as Audio Clip objects, see Listing \ref{lst:query}.
 
 \begin{lstlisting}[label = {lst:query}, caption={Conditional Statement for Creating Audio Clips}]
 if (soundCursor.getString(albumColumn).equals(Recorder.albumName))
@@ -296,7 +290,7 @@ By using an ArrayList container to store these AudioClip objects, the List View 
 {An image of the final implementation of the Play tab. It uses Android's own MediaController to control the play functions, and highlights the current chosen track.}
 {1.0}
 
-For the playback of these audio clips, a sound Service was implemented meaning that if the user wanted, they could continue listening to their audio clips if they have navigated away from the application, or if they lock their device.
+For the playback of these audio clips, a sound Service was implemented meaning that if the user wanted, they could continue listening to their audio clips if they have navigated away from the application, or if they lock their device. Playback was controlled through an instance of a MediaPlayer that was bound to the Service, and a default MediaController for the user interface. As the project focus was more on the guitar tuner and recording aspect, it seemed inappropriate to redesign a media controller just for this purpose, the implementation of this can be seen in Figure \ref{fig:playback}.
 
 \subsection{Tuning}
 
@@ -312,23 +306,33 @@ NEED TO TALK ABOUT ACCELEROMETER HERE
 %%• An evaluation of your app against user feedback or as compared with other apps/ games
 %%• Possible improvements to your application
 
+The original concept as outlined in my introduction was to develop a guitar tuner application that was unique compared to the ones already available on the market. This was to include a reference tuner and a voice recorder function. The final application developed implements both these features with full functionality. 
 
-%% original concept was different etc
+Similarly to the DaTuner application, a simple colour scheme was used, and remains consistent throughout. However, processing sound input through a chromatic tuner was too advanced for the project and was not implemented. The developed application is also very quick and simple to use, much like this app.
 
-The original concept of the app was very similar to the 
+The application developed encompasses the reference tuner inspired by the Martin Guitar Tuner, however it improves a lot on the user experience design by incorporating simple lateral navigation using a swipe-able tab view. This by far is easier to use than the "hamburger" style menu of the Martin Guitar Tuner, because it allows the user to see every option available to them instantly, and to navigate between them within one movement. Even though, the ability to tap on a sound and have it play is a good feature of the Martin app that is not implemented within this project, the developed application improves on the feedback of this particular reference tuner as of the added functionality of the looping play-back. When tuning a guitar by ear, looping play back is often essential to ensure the tone is correct. The inclusion of this feature allows the user to continuously play the tone whilst attempting to tune their guitar - without having to repeatedly interact with the device.
 
+%% voice recorder
+%% user feedback
 
 \subsection{Further Work}
 
-In improving the application, the next steps are to build more functionality in the app by including a chromatic tuner. RAY CASTING. more realistic modelling of guitar REFINEMENT OF ACCELEROMETER FUNCTION.
+In improving the application, the next steps are to build more functionality in the app by including a chromatic tuner. 
 
+One improvement to be made to the application is refinement of the user interaction for the Tune tab. Currently, the only way to change the chosen string is to shake the device, this is a unique feature that shows of the use of the Android API however it is limited. Implementing functionality where a user can tap on one of the strings or tuning pegs, similar to the Martin Guitar Tuner, would be a nice addition to the applications user interface. However, due to the fact the surface view is implemented using OpenGL ES, it means that to make this possible calculations would have to be made on the exact position of the object within the 3D space. This is called picking, which is a form of ray casting. \cite{ray} A bounding volume would have to be calculated for each clickable object within the scene, and each time the user would tap on the screen calculations must be performed to see if the ray, from the screen coordinates, intersects with the bounding volume of the shape. This was definitely beyond the scope of the project's requirements, as it ventures on more computer graphics than mobile app development, however if implemented would improve the application significantly. As for the current shaking implementation, it is not very accurate and could be improved.
+
+Aesthetics wise, the tune tab could also be improved by loading in a model of a guitar headstock to make it look more realistic. This was originally going to be the case, however a suitable model could not be found, with separate strings. Another way of making the guitar more realistic would be to change the string vibration animation to use vertex displacement within the shader program. Currently the shader program only shades each pixel according to the lighting model. However, a separate shader program could be written to change the actual geometry of the strings and displace it's vertices along a sine wave, modelling an actual guitar string's movement.
 
 \section{Summary}
 
-%%Summary of any resources used plus a list of references. You must provide a
-%%reference for every resource used that you have not created yourself – for
-%%example, images and sound. 
+%% CONCLUSION
 
+The only resources used that were not created for this project include the vector graphic of the microphone \cite{microphone}, and the reference notes \cite{refNotes}.
+
+Any online tutorials used for reference for parts of the Android API that were not covered in the module are below:
+\begin{itemize}
+	\item %% STUFF HERE
+\end{itemize}
 
 
 \bibliographystyle{acmsiggraph}
