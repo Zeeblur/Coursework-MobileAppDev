@@ -7,22 +7,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 /**
- * Created by Zoeoeh on 20/03/2016.
- *
+ * Created by Zoe Wall on 20/03/2016.
+ * Custom GLSurface class used for initialising and listening to touch events
  */
 public class MyGLSurface extends GLSurfaceView {
 
     // declare renderer
     private final TestRenderer myRenderer;
-
-    // context constructor
-    public MyGLSurface(Context context){
-        super(context);
-
-        // initialise renderer object
-        myRenderer = new TestRenderer();
-        initialise(context);
-    }
 
     // attribute constructor (for XML initialisation)
     public MyGLSurface(Context context, AttributeSet attrs) {
@@ -33,21 +24,20 @@ public class MyGLSurface extends GLSurfaceView {
         initialise(context);
     }
 
-    public void initialise(Context context)
+    private void initialise(Context context)
     {
-        // add supporting checks for Opengl ES 2.0 here
-
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
 
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(myRenderer);
-
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        // show touch event in log.
+        // beginning of ray casting implementation - not complete
         if (event != null)
         {
             if (event.getAction() == MotionEvent.ACTION_DOWN)
@@ -68,7 +58,5 @@ public class MyGLSurface extends GLSurfaceView {
 
         return super.onTouchEvent(event);
     }
-
-    // TODO write why I wont do raycasting....
 
 }

@@ -5,9 +5,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
- * Created by Zoeoeh on 21/03/2016.
+ * Created by Zoe Wall on 21/03/2016.
+ * Pager Adapter created to return correct fragment when clicked.
  */
 public class PageAdapt extends FragmentStatePagerAdapter {
+
     private int numberOfTabs;
 
     public PageAdapt(FragmentManager fragMan, int tabNums)

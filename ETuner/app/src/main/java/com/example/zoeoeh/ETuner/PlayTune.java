@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-
+/**
+ * Created by Zoe Wall on 23/03/2016.
+ * Fragment for Play Tab, used to display user's voice recordings and allow playback of them.
+ */
 public class PlayTune extends Fragment implements MediaPlayerControl {
 
     private static ArrayList<AudioClip> clipList;
@@ -213,6 +216,7 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         super.onDestroy();
     }
 
+    // stops service and exits application
     public void exitPlayer()
     {
         TabSwitcher.getmContext().stopService(playIntent);
@@ -268,7 +272,7 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
         return pageInvisible;
     }
 
-    public void playNext()
+    private void playNext()
     {
         myService.playNext();
 
@@ -277,10 +281,9 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
             setController();
             playbackPaused = false;
         }
-        //controller.show(0);
     }
 
-    public void playPrev()
+    private void playPrev()
     {
         myService.playPrev();
 
@@ -289,7 +292,6 @@ public class PlayTune extends Fragment implements MediaPlayerControl {
             setController();
             playbackPaused = false;
         }
-        //controller.show(0);
     }
 
     // Implementation of media player controller interface

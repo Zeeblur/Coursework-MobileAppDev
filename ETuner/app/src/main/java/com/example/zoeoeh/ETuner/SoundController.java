@@ -5,6 +5,7 @@ import android.widget.MediaController;
 
 /**
  * Created by Zoeoeh on 24/03/2016.
+ * Class used to override MediaController hide method to hide when required
  */
 public class SoundController extends MediaController {
 

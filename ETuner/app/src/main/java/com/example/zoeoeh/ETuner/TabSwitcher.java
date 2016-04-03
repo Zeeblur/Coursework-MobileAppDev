@@ -17,11 +17,13 @@ public class TabSwitcher extends AppCompatActivity {
     private static Context mContext;
     private static PageAdapt adapter;
 
+    // setter for list flag
     public static void setListDirty(Boolean value)
     {
         listDirty = value;
     }
 
+    // getter for main context of activity
     public static Context getmContext()
     {
         return mContext;
@@ -99,12 +101,11 @@ public class TabSwitcher extends AppCompatActivity {
 
     }
 
-    // click handler for fragment xml clip
+    // click handler for fragment xml clip, has to be in this and not in the fragement as this is the main activity
     public void soundClicked(View view)
     {
         PlayTune myTune = (PlayTune)adapter.getItem(1);
-        myTune.clipPicked(view);
-        Toast.makeText(getmContext(), "mmhmmm clipPicked", Toast.LENGTH_SHORT).show();
+        myTune.clipPicked(view);                         // call to method in fragment
     }
 
     // exit with app closing player

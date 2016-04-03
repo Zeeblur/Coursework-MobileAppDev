@@ -19,17 +19,14 @@ import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Created by Zoe Wall on 03/03/2016.
- * Last modified 18/03/16.
+ * Last modified 24/03/16.
  * Handles opengl calls and renders image
- * <p/>
- * This class implements our custom renderer. Note that the GL10 parameter passed in is unused for OpenGL ES 2.0
- * renderers -- the static class GLES20 is used instead.
+ *
  */
 public class TestRenderer implements GLSurfaceView.Renderer {
 
     // debug log TAG
     private static final String TAG = "Test Renderer";
-
 
     private float[] mModelMatrix = new float[16];
     private float[] mViewMatrix = new float[16];
@@ -329,16 +326,9 @@ public class TestRenderer implements GLSurfaceView.Renderer {
         final int vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);
         final int fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
 
-        // vertex displacement shader
-        // final int displacementVertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, getVertexShaderDisplace());
-
         // link compiled shaders to create default phong shader program
         programHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
                 new String[]{"a_Position", "a_Colour", "a_Normal"});
-
-        // link compiled shaders to create vertex displacement program
-        //dispProgramHandle = createAndLinkProgram(displacementVertexShaderHandle, fragmentShaderHandle,
-        //        new String[]{"a_Position", "a_Colour", "a_Normal"});
 
     }
 

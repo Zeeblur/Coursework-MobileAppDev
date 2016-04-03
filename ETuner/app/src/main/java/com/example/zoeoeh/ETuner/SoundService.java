@@ -48,7 +48,7 @@ public class SoundService extends Service implements
         initMediaPlayer();
     }
 
-    public void initMediaPlayer()
+    private void initMediaPlayer()
     {
         // sets the player's properties
 
@@ -122,10 +122,10 @@ public class SoundService extends Service implements
         AudioClip playingClip = clips.get(currentPos);
 
         // iterate through list of clip layouts. Find the playing clip and change it's colour
-        for (int i = 0; i < ClipAdapt.myClipLayouts.size(); ++i )
+        for (int i = 0; i < ClipAdapt.getMyClipLayouts().size(); ++i )
         {
-            if (currentPos == ClipAdapt.myClipLayouts.get(i).getTag()){
-                ClipAdapt.myClipLayouts.get(i).setBackgroundColor(getResources().getColor(R.color.darkerBlue));
+            if (currentPos == ClipAdapt.getMyClipLayouts().get(i).getTag()){
+                ClipAdapt.getMyClipLayouts().get(i).setBackgroundColor(getResources().getColor(R.color.darkerBlue));
             }
         }
 
@@ -203,9 +203,9 @@ public class SoundService extends Service implements
     public void resetColour()
     {
         // iterate through list of clip layouts and reset the colour to standard background
-        for (int i = 0; i < ClipAdapt.myClipLayouts.size(); ++i )
+        for (int i = 0; i < ClipAdapt.getMyClipLayouts().size(); ++i )
         {
-            ClipAdapt.myClipLayouts.get(i).setBackgroundColor(getResources().getColor(R.color.backgroundGrey));
+            ClipAdapt.getMyClipLayouts().get(i).setBackgroundColor(getResources().getColor(R.color.backgroundGrey));
         }
     }
 

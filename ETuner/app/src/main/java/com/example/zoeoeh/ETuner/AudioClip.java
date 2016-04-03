@@ -1,7 +1,8 @@
 package com.example.zoeoeh.ETuner;
 
 /**
- * Created by Zoeoeh on 23/03/2016.
+ * Created by Zoe Wall on 23/03/2016.
+ * Used to store and retrieve data for an audio clip
  */
 public class AudioClip {
 

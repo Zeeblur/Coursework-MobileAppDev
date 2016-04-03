@@ -17,7 +17,15 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+/**
+ * Created by Zoe Wall on 20/02/2016.
+ * Fragement inflated for TuneTab, using an accelerometer, and handlers for switches.
+ * Controlls playback for tuning.
+ */
 public class OpenGLClass extends Fragment implements SensorEventListener {
+
+    // Name of guitar strings.
+    private String guitarStrings[] = { "E_Low", "A", "D", "G", "B", "E_High" };
 
     private String TAG = "OpenGLClassFrag";
 
@@ -26,6 +34,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
     private Sensor myAccel;
     private static MediaPlayer myPlayer;
 
+    // vars for accelerometer control
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
     private final int SHAKE_THRESHOLD = 600;
@@ -102,6 +111,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
             }
         });
 
+        // initialise sensor listener
         mySensorMan = (SensorManager) TabSwitcher.getmContext().getSystemService(Context.SENSOR_SERVICE);
         myAccel = mySensorMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mySensorMan.registerListener(this, myAccel, SensorManager.SENSOR_DELAY_NORMAL);
@@ -185,18 +195,25 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
                         currentSoundIndex = 0;
                     }
 
-                    Toast.makeText(TabSwitcher.getmContext(), "YOU SHOOK ME" + direction + " sound " + currentSoundIndex, Toast.LENGTH_SHORT).show();
+                    // display toast
+                    Toast.makeText(TabSwitcher.getmContext(), "You shook me " + direction + ". Now Playing " + guitarStrings[currentSoundIndex], Toast.LENGTH_SHORT).show();
+
+                    // change flag
                     shakeDirty = true;
+
+                    // if play is checked, update the string
                     if (playChecked)
                     {
                         updatePlay();
                     }
                 }
 
+                last_x = x;
+                last_y = y;
+                last_z = z;
+
             }
-            last_x = x;
-            last_y = y;
-            last_z = z;
+
 
         }
     }
@@ -206,7 +223,7 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
     }
 
-    public void updatePlay()
+    private void updatePlay()
     {
         // if player is playing, stop and start with new looping set
         if (myPlayer != null)
@@ -236,30 +253,36 @@ public class OpenGLClass extends Fragment implements SensorEventListener {
 
     }
 
-    // play
-
-    public void playSound(Context context, int soundID)
+    private void playSound(Context context, int soundID)
     {
+        // Play sound from given ID number
+
         Log.d(TAG, "sound playing sound ID " + soundID + " current sound " + currentSoundIndex);
+
+        // if not null reset and release player to be initialised again
         if (myPlayer != null)
         {
             myPlayer.reset();
             myPlayer.release();
         }
 
+        // prepare media player with sound source
         myPlayer = MediaPlayer.create(context, myStrings[soundID]);
 
+        // set which chosen string it is
         TestRenderer.setChosenString(soundID);
 
+        // set looping
         myPlayer.setLooping(loopingChecked);
 
+        // start playing and reset flag
         myPlayer.start();
         shakeDirty = false;
 
     }
 
     // stop playback and release media player/pointer if playing
-    public void stopPlay()
+    private void stopPlay()
     {
         if (myPlayer.isPlaying())
         {

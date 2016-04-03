@@ -11,13 +11,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by Zoeoeh on 23/03/2016.
+ * Created by Zoe Wall on 23/03/2016.
+ * Created to return a view based on the chosen song to populate the list tab
  */
 public class ClipAdapt extends BaseAdapter {
 
+    // local copy of song lists
     private ArrayList<AudioClip> clips;
     private final LayoutInflater clipInflater;
-    public static ArrayList<LinearLayout> myClipLayouts = new ArrayList<>();
+    private static ArrayList<LinearLayout> myClipLayouts = new ArrayList<>();
 
     public ClipAdapt(Context c, ArrayList<AudioClip> theClips)
     {
@@ -28,9 +30,7 @@ public class ClipAdapt extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return clips.size();
-    }
+    public int getCount() { return clips.size(); }
 
     @Override
     public Object getItem(int arg0) {
@@ -64,5 +64,8 @@ public class ClipAdapt extends BaseAdapter {
 
         return clipLayout;
     }
+
+    // getter for clip layout list
+    public static ArrayList<LinearLayout> getMyClipLayouts() { return myClipLayouts; }
 
 }

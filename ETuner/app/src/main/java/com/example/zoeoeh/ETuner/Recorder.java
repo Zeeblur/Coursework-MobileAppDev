@@ -22,6 +22,11 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Created by Zoe Wall on 23/02/2016.
+ * Recorder Fragment, uses Media Recorder to record voice clips and displays dialog prompt to edit data
+ */
+
 public class Recorder extends Fragment {
 
     private static final String TAG = "Recorder";
@@ -142,7 +147,7 @@ public class Recorder extends Fragment {
         return myView;
     }
 
-    public void showDialog()
+    private void showDialog()
     {
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(getActivity());
@@ -257,14 +262,15 @@ public class Recorder extends Fragment {
         Uri newUri = contentResolver.insert(base, values);
 
         TabSwitcher.getmContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
-        Toast.makeText(TabSwitcher.getmContext(), "Added File " + newUri, Toast.LENGTH_LONG).show();
+        Log.d(TAG, "Added file " + newUri);
+        Toast.makeText(TabSwitcher.getmContext(), "Added Recording " + fileName, Toast.LENGTH_LONG).show();
 
         // sets dirty flag for updating list from database
         TabSwitcher.setListDirty(true);
     }
 
 
-    public boolean validateInputFileName(String input)
+    private boolean validateInputFileName(String input)
     {
 
         // check if existing file
