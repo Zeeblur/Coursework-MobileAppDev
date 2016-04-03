@@ -1,18 +1,40 @@
-\begin{thebibliography}{\protect\citename{{C.F Martin \& Co} }2015}
+\begin{thebibliography}{\protect\citename{{Samsung Galaxy S6} }2015}
 
-\bibitem[\protect\citename{Android }a]{Swipe}
+\bibitem[\protect\citename{Android }a]{Service}
+{\sc Android}.
+\newblock Android develop: Media playback.
+\newblock {\em Accessed: March 2016\/}.
+\newblock
+  \href{http://developer.android.com/guide/topics/media/mediaplayer.html}{www.developer.android.com}.
+
+\bibitem[\protect\citename{Android }b]{SupportedMedia}
+{\sc Android}.
+\newblock Android develop: Supported media formats.
+\newblock {\em Accessed: March 2016\/}.
+\newblock
+  \href{http://developer.android.com/guide/appendix/media-formats.html}{www.developer.android.com}.
+
+\bibitem[\protect\citename{Android }c]{Swipe}
 {\sc Android}.
 \newblock Creating swipe views with tabs.
 \newblock {\em Accessed: March 2016\/}.
 \newblock
   \href{http://developer.android.com/training/implementing-navigation/lateral.html#horizontal-paging}{www.developer.android.com}.
 
-\bibitem[\protect\citename{Android }b]{SupportedMedia}
+\bibitem[\protect\citename{Android }d]{MediaController}
 {\sc Android}.
-\newblock Supported media formats.
+\newblock Mediacontroller.
 \newblock {\em Accessed: March 2016\/}.
 \newblock
-  \href{http://developer.android.com/guide/appendix/media-formats.html}{www.developer.android.com}.
+  \href{http://developer.android.com/reference/android/widget/MediaController.html}{www.developer.android.com}.
+
+\bibitem[\protect\citename{Android }2011]{swipeArticle}
+{\sc Android}.
+\newblock 2011.
+\newblock Android design: Swipe views.
+\newblock {\em Accessed: Feb 2016\/}.
+\newblock
+  \href{http://developer.android.com/design/patterns/swipe-views.html}{www.developer.android.com}.
 
 \bibitem[\protect\citename{{Applaud Apps} }2016]{DaTune}
 {\sc {Applaud Apps}}.
@@ -89,6 +111,11 @@
 \newblock {\em Accessed: March 2016\/}.
 \newblock
   \href{http://roland.com/support/article/?q=faq&p=TU-2&id=1832635}{www.roland.com}.
+
+\bibitem[\protect\citename{{Samsung Galaxy S6} }2015]{Samsung}
+{\sc {Samsung Galaxy S6}}.
+\newblock 2015.
+\newblock Voice recorder.
 
 \bibitem[\protect\citename{{Vecto2000} }2011]{microphone}
 {\sc {Vecto2000}}.
